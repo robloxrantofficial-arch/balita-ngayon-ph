@@ -1,19 +1,17 @@
----
-permalink: /sitemap.xml
-eleventyExcludeFromCollections: true
----
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://sitemaps.org">
+<?xml-stylesheet type="text/css" href="https://www.xml-sitemaps.com/css/sitemap.css"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
+
   <url>
-    <loc>https://pilipinasnews.netlify.app/</loc>
-    <changefreq>hourly</changefreq>
-    <priority>1.0</priority>
+       <loc>https://pilipinasnews.netlify.app/</loc>
+       <lastmod>2026-08-07T16:49:40+00:00</lastmod>
+       <changefreq>daily</changefreq>
+       <priority>1.0000</priority>
   </url>
-  {% for item in news %}
   <url>
-    <loc>https://pilipinasnews.netlify.app/news/{{ item.slug }}/</loc>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
+       <loc>https://pilipinasnews.netlify.app/news/portal-active-notice/</loc>
+       <lastmod>2026-08-07T16:49:40+00:00</lastmod>
+       <changefreq>daily</changefreq>
+       <priority>0.8000</priority>
   </url>
-  {% endfor %}
 </urlset>
