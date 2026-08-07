@@ -6,9 +6,15 @@ module.exports = function(eleventyConfig) {
 
   eleventyConfig.addGlobalData("balita", async function() {
     try {
-      const parser = new Parser();
-      // ✅ GUMAMIT TAYO NG INQUIRER — MAS SIGURADO ANG RSS!
-      const rssUrl = "https://www.inquirer.net/rss/news";
+      const parser = new Parser({
+        defaultRSS: 2.0,
+        headers: {
+          "User-Agent": "Mozilla/5.0"
+        }
+      });
+      
+      // ✅ GUMAMIT TAYO NG GMA NEWS — MAS MALINIS ANG RSS! WALANG SIMBOLO!
+      const rssUrl = "https://www.gmanet.com/news/national/rss.xml";
       
       console.log("🔍 KUKUHA NG BALITA MULA SA:", rssUrl);
       
@@ -20,14 +26,14 @@ module.exports = function(eleventyConfig) {
         title: item.title,
         link: item.link,
         date: item.pubDate,
-        description: (item.contentSnippet || item.description || "").substring(0, 120) + "..."
+        description: (item.contentSnippet || item.description || "").replace(/<[^>]*>/g, "").substring(0, 120) + "..."
       }));
     } catch (err) {
       console.error("❌ MALI ANG PAGKUHA NG BALITA:", err.message);
-      // KUNG MAY MALI — MAGBIBIGAY NG HALIMBAWA PARA HINDI WALANG LAMAN!
+      // ✅ KUNG MAY MALI — MAGBIBIGAY NG HALIMBAWA PARA HINDI WALANG LAMAN!
       return [
-        { title: "Halimbawang Balita 1 — Hintayin ang susunod na update", link: "#", date: new Date().toISOString(), description: "Kasalukuyang kinukuha ang mga bagong balita..." },
-        { title: "Halimbawang Balita 2 — Suriin ang RSS link", link: "#", date: new Date().toISOString(), description: "Kung paulit-ulit na lumalabas ito — palitan ang RSS URL sa .eleventy.js" }
+        { title: "Halimbawang Balita — Kukuhin pa rin mula sa GMA News", link: "#", date: new Date().toISOString(), description: "Kasalukuyang inaayos ang pagkuha ng balita. Maghintay ng susunod na update..." },
+        { title: "Kung paulit-ulit itong lumalabas — suriin ang RSS link", link: "#", date: new Date().toISOString(), description: "Subukang i-refresh muli mamaya. Maaaring pansamantalang abala lamang ang pinagkukunan." }
       ];
     }
   });
