@@ -25,7 +25,8 @@ module.exports = async function() {
         allArticles.push({
           title: item.title?.trim() || "Walang Pamagat",
           link: item.link,
-          date: item.isoDate ? new Date(item.isoDate) : new Date(item.pubDate || Date.now()),
+          // Ginawang string ang date para hindi magkaproblema sa pag-render ang Eleventy
+          date: item.isoDate ? new Date(item.isoDate).toLocaleDateString('en-US') : new Date(item.pubDate || Date.now()).toLocaleDateString('en-US'),
           source: feed.name,
           isWeather
         });
@@ -37,10 +38,10 @@ module.exports = async function() {
 
   const seen = new Set();
   allArticles = allArticles.filter(a => {
-    if (seen.has(a.link)) return false;
+    if (!a.link || seen.has(a.link)) return false;
     seen.add(a.link);
     return true;
   });
 
-  return allArticles.sort((a, b) => b.date - a.date).slice(0, 30);
+  return allArticles.slice(0, 30);
 };
