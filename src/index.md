@@ -9,7 +9,6 @@ title: "Pilipinas Auto News Portal"
 
   <!-- BANNER POST (PAGASA Weather) -->
   <div style="background: white; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); overflow: hidden; border: 1px solid #e9ecef; margin-bottom: 35px;">
-    <!-- Gumamit ng CSS Linear Gradient bilang magandang abstract cover background upang hindi ma-block ng panlabas na network -->
     <div style="width: 100%; height: 260px; background: linear-gradient(135deg, #003366 0%, #0066cc 100%); display: flex; align-items: center; justify-content: center; color: white;">
       <h1 style="font-size: 4em; margin: 0; opacity: 0.3;">⛈️ WEATHER</h1>
     </div>
