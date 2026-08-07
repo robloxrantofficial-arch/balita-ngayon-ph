@@ -1,7 +1,7 @@
 {
-  "name": "eleventy-auto-news",
+  "name": "eleventy-rss-auto-news",
   "version": "1.0.0",
-  "description": "Auto news website gamit ang Eleventy",
+  "description": "Auto news website gamit ang RSS Parser at Eleventy",
   "main": ".eleventy.js",
   "scripts": {
     "build": "npx @11ty/eleventy",
@@ -9,6 +9,6 @@
   },
   "dependencies": {
     "@11ty/eleventy": "^2.0.1",
-    "isomorphic-fetch": "^3.0.0"
+    "rss-parser": "^3.13.0"
   }
 }
