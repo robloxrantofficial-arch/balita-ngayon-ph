@@ -1,40 +1,43 @@
-const EleventyFetch = require("@11ty/eleventy-fetch");
 const Parser = require("rss-parser");
+require("isomorphic-fetch");
 
 module.exports = function(eleventyConfig) {
-  // ✅ IYONG ORIHINAL NA SETTING — HINDI BINAGO!
   eleventyConfig.addPassthroughCopy("src/assets/css");
 
-  // 📰 AWTOMATIKONG KUKUHA NG BALITA MULA SA GMA NEWS — BAWAT 1 ORAS!
   eleventyConfig.addGlobalData("balita", async function() {
-    const parser = new Parser();
-    const rssUrl = "https://www.gmanet.com/news/national/rss.xml";
+    try {
+      const parser = new Parser();
+      // ✅ GUMAMIT TAYO NG INQUIRER — MAS SIGURADO ANG RSS!
+      const rssUrl = "https://www.inquirer.net/rss/news";
+      
+      console.log("🔍 KUKUHA NG BALITA MULA SA:", rssUrl);
+      
+      const feed = await parser.parseURL(rssUrl);
+      
+      console.log("✅ NAKUHA NA! BILANG NG BALITA:", feed.items.length);
 
-    // KUKUHA NG BAGONG BALITA BAWAT 1 ORAS
-    const feed = await EleventyFetch(rssUrl, {
-      duration: "1h",
-      type: "text"
-    });
-
-    const parsed = await parser.parseString(feed);
-
-    // BABALIK LANG ANG UNANG 8 BALITA — MALINIS NA WALANG HTML CODE
-    return parsed.items.slice(0, 8).map(item => ({
-      title: item.title,
-      link: item.link,
-      date: item.pubDate,
-      description: item.contentSnippet?.substring(0, 120) + "..."
-    }));
+      return feed.items.slice(0, 8).map(item => ({
+        title: item.title,
+        link: item.link,
+        date: item.pubDate,
+        description: (item.contentSnippet || item.description || "").substring(0, 120) + "..."
+      }));
+    } catch (err) {
+      console.error("❌ MALI ANG PAGKUHA NG BALITA:", err.message);
+      // KUNG MAY MALI — MAGBIBIGAY NG HALIMBAWA PARA HINDI WALANG LAMAN!
+      return [
+        { title: "Halimbawang Balita 1 — Hintayin ang susunod na update", link: "#", date: new Date().toISOString(), description: "Kasalukuyang kinukuha ang mga bagong balita..." },
+        { title: "Halimbawang Balita 2 — Suriin ang RSS link", link: "#", date: new Date().toISOString(), description: "Kung paulit-ulit na lumalabas ito — palitan ang RSS URL sa .eleventy.js" }
+      ];
+    }
   });
 
-  // 📅 PAGANDAHIN ANG PETSA — HALIMBAWA: "Agosto 8, 2026"
   eleventyConfig.addFilter("formatDate", function(dateStr) {
     return new Date(dateStr).toLocaleDateString("tl-PH", {
       year: "numeric", month: "long", day: "numeric"
     });
   });
 
-  // ✅ IYONG ORIHINAL NA SETTING — HINDI BINAGO!
   return {
     markdownTemplateEngine: "njk",
     htmlTemplateEngine: "njk",
