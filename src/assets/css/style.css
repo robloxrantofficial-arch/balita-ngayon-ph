@@ -1,8 +1,7 @@
 body {
-    font-family: Arial, sans-serif;
+    background-color: #f8f9fa;
     margin: 0;
     padding: 0;
-    background-color: #f4f4f4;
 }
 header {
     background-color: #003366;
@@ -15,59 +14,6 @@ header nav a {
     text-decoration: none;
     font-weight: bold;
 }
-.main-wrapper {
-    display: grid;
-    grid-template-columns: 250px 1fr 280px;
-    gap: 20px;
-    max-width: 1300px;
-    margin: 20px auto;
-    padding: 0 15px;
-}
-.sidebar-left, .sidebar-right {
-    background: white;
-    padding: 15px;
-    border-radius: 5px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    height: fit-content;
-}
-.main-content {
-    background: white;
-    padding: 20px;
-    border-radius: 5px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-}
-.news-card {
-    border-bottom: 1px solid #eee;
-    padding: 15px 0;
-}
-.news-card:last-child {
-    border: none;
-}
-.news-card img {
-    width: 100%;
-    height: auto;
-    border-radius: 4px;
-    margin-bottom: 8px;
-}
-.sidebar-card {
-    margin-bottom: 15px;
-    border-bottom: 1px solid #eee;
-    padding-bottom: 10px;
-}
-.sidebar-card img {
-    width: 100%;
-    height: 120px;
-    object-fit: cover;
-    border-radius: 4px;
-}
-.sidebar-card h4 {
-    margin: 5px 0;
-    font-size: 0.95em;
-}
-.sidebar-card h4 a {
-    color: #333;
-    text-decoration: none;
-}
 footer {
     text-align: center;
     padding: 20px;
@@ -75,8 +21,4 @@ footer {
     color: white;
     margin-top: 40px;
 }
-@media (max-width: 900px) {
-    .main-wrapper {
-        grid-template-columns: 1fr;
-    }
-}
+/* Binura at nilinis ang lahat ng lumang grid restrictions */
