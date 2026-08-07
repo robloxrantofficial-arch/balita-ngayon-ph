@@ -21,6 +21,7 @@ module.exports = async function() {
   
   if (process.env.NETLIFY) {
     const GNEWS_KEY = "1e1726413d6739ff8d29b07250840a03";
+    // PINALUWAG NA URL: Tinanggal ang bansa at wika para siguradong laging may lamang balita bawat minuto
     url = `https://gnews.io{GNEWS_KEY}`;
   } else {
     const NEWS_KEY = "5b4c87a77e3f4d20bf8f3151934c75e9";
@@ -54,7 +55,7 @@ module.exports = async function() {
     }
 
     if (allArticles.length === 0) throw new Error("No articles found");
-    return allArticles.slice(0, 20); 
+    return allArticles.slice(0, 10); 
 
   } catch (err) {
     return [
