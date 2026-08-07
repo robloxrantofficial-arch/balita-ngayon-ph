@@ -1,16 +1,22 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<?xml-stylesheet type="text/css" href="https://xml-sitemaps.com"?>
-<urlset xmlns="http://sitemaps.org" xmlns:xhtml="http://w3.org">
+---
+permalink: /sitemap.xml
+eleventyExcludeFromCollections: true
+---
+<?xml version="1.0" encoding="utf-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <!-- 1. Ang iyong Homepage -->
   <url>
-       <loc>https://pilipinasnews.netlify.app/</loc>
-       <lastmod>2026-08-07T16:49:40+00:00</lastmod>
-       <changefreq>daily</changefreq>
-       <priority>1.0000</priority>
+    <loc>https://pilipinasnews.netlify.app/</loc>
+    <changefreq>hourly</changefreq>
+    <priority>1.0</priority>
   </url>
+
+  <!-- 2. Awtomatikong loop para sa lahat ng dynamic news articles -->
+  {%- for item in news %}
   <url>
-       <loc>https://netlify.app</loc>
-       <lastmod>2026-08-07T16:49:40+00:00</lastmod>
-       <changefreq>daily</changefreq>
-       <priority>0.8000</priority>
+    <loc>https://netlify.app{{ item.slug }}/</loc>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
   </url>
+  {%- endfor %}
 </urlset>
