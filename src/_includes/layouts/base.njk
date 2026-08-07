@@ -31,6 +31,25 @@
             text-decoration: none;
             font-weight: bold;
         }
+        main {
+            max-width: 800px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+        main h1 { color: #1e293b; margin-bottom: 20px; }
+        main ul { list-style: none; padding: 0; }
+        main li { 
+            padding: 15px 0; 
+            border-bottom: 1px solid #ddd; 
+        }
+        main li a { 
+            color: #00467f; 
+            text-decoration: none; 
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+        main li a:hover { text-decoration: underline; }
+        main small { color: #64748b; }
         footer {
             text-align: center;
             padding: 25px;
@@ -48,8 +67,7 @@
         </nav>
     </header>
     
-    <!-- GINAWANG DIRECT BLOCK: Upang malayang sumabog nang malapad ang index.md sa buong screen -->
-    <main style="display: block; width: 100%;">
+    <main>
         {{ content | safe }}
     </main>
 
