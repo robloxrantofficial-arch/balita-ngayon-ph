@@ -1,0 +1,12 @@
+name: Auto News Build Schedule
+on:
+  schedule:
+    - cron: '0 6,12,18 * * *' # Awtomatikong mag-rebuild tuwing 6 AM, 12 PM, at 6 PM
+  workflow_dispatch:
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger Netlify Build
+        run: |
+          curl -X POST -d {} ${{ secrets.NETLIFY_BUILD_HOOK }}
