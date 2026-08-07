@@ -21,7 +21,7 @@ module.exports = function(eleventyConfig) {
     dir: {
       input: "src",
       output: "_site",
-      includes: "_includes",
+      includes: "_includes",      // ← SABIHIN DITO KUNG SAAN ANG _includes!
       layouts: "_includes/layouts"
     }
   };
