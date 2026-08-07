@@ -3,6 +3,7 @@ require("isomorphic-fetch");
 
 module.exports = function(eleventyConfig) {
   eleventyConfig.addPassthroughCopy("src/assets/css");
+  eleventyConfig.addPassthroughCopy("sw.js"); // ✅ PARA SA MONETAG!
 
   eleventyConfig.addGlobalData("balita", async function() {
     try {
@@ -10,35 +11,28 @@ module.exports = function(eleventyConfig) {
         headers: { "User-Agent": "Mozilla/5.0" }
       });
       
-      const rssUrl = "http://feeds.bbci.co.uk/news/world/rss.xml";
+      // ✅ GOOGLE NEWS — TAGALOG NA BALITA MULA SA PILIPINAS!
+      const rssUrl = "https://news.google.com/rss?hl=fil&gl=PH&ceid=PH:fil";
       
-      console.log("🔍 KUKUHA NG BALITA AT LARAWAN MULA SA:", rssUrl);
+      console.log("🔍 KUKUHA NG BALITA MULA SA GOOGLE NEWS...");
       
       const feed = await parser.parseURL(rssUrl);
       
       console.log("✅ NAKUHA NA! BILANG NG BALITA:", feed.items.length);
 
-      // 🖼️ HANAPIN ANG LARAWAN SA LAHAT NG PUWEDE PUWESTO
+      // 🖼️ HANAPIN ANG LARAWAN
       const kuninLarawan = (item) => {
-        // Paraan 1: enclosure
         if (item.enclosure?.url) return item.enclosure.url;
-        // Paraan 2: media thumbnail
         if (item.thumbnail) return item.thumbnail;
-        // Paraan 3: nasa loob ng description
-        if (item.description) {
-          const tugma = item.description.match(/<img[^>]+src="([^"]+)"/);
-          if (tugma && tugma[1]) return tugma[1];
-        }
-        // Kung walang larawan → WALANG IBABALIK
         return null;
       };
 
       return feed.items.slice(0, 8).map(item => ({
-        title: item.title,
+        title: item.title.replace(/ - .+$/, ""), // ✅ TANGGALIN ANG PANGALAN NG PINAGKUKUNAN SA DULO
         link: item.link,
         date: item.pubDate,
-        description: (item.contentSnippet || item.description || "").replace(/<[^>]*>/g, "").substring(0, 120) + "...",
-        larawan: kuninLarawan(item) // ✅ NAKUHA NA ANG LARAWAN!
+        description: (item.contentSnippet || item.description || "").substring(0, 120) + "...",
+        larawan: kuninLarawan(item)
       }));
     } catch (err) {
       console.error("❌ MALI:", err.message);
