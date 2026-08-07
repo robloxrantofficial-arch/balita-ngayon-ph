@@ -1,5 +1,5 @@
 ---
-layout: base.njk
+layout: _includes/base.njk
 title: Balita Ngayon PH
 ---
 
