@@ -7,32 +7,43 @@ module.exports = function(eleventyConfig) {
   eleventyConfig.addGlobalData("balita", async function() {
     try {
       const parser = new Parser({
-        headers: {
-          "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"
-        }
+        headers: { "User-Agent": "Mozilla/5.0" }
       });
       
-      // ✅ GUMAMIT TAYO NG BBC NEWS — SIGURADONG GUMAGANA AT HINDI HINAHARANG!
       const rssUrl = "http://feeds.bbci.co.uk/news/world/rss.xml";
       
-      console.log("🔍 KUKUHA NG BALITA MULA SA:", rssUrl);
+      console.log("🔍 KUKUHA NG BALITA AT LARAWAN MULA SA:", rssUrl);
       
       const feed = await parser.parseURL(rssUrl);
       
       console.log("✅ NAKUHA NA! BILANG NG BALITA:", feed.items.length);
 
+      // 🖼️ HANAPIN ANG LARAWAN SA LAHAT NG PUWEDE PUWESTO
+      const kuninLarawan = (item) => {
+        // Paraan 1: enclosure
+        if (item.enclosure?.url) return item.enclosure.url;
+        // Paraan 2: media thumbnail
+        if (item.thumbnail) return item.thumbnail;
+        // Paraan 3: nasa loob ng description
+        if (item.description) {
+          const tugma = item.description.match(/<img[^>]+src="([^"]+)"/);
+          if (tugma && tugma[1]) return tugma[1];
+        }
+        // Kung walang larawan → WALANG IBABALIK
+        return null;
+      };
+
       return feed.items.slice(0, 8).map(item => ({
         title: item.title,
         link: item.link,
         date: item.pubDate,
-        description: (item.contentSnippet || item.description || "").substring(0, 120) + "..."
+        description: (item.contentSnippet || item.description || "").replace(/<[^>]*>/g, "").substring(0, 120) + "...",
+        larawan: kuninLarawan(item) // ✅ NAKUHA NA ANG LARAWAN!
       }));
     } catch (err) {
-      console.error("❌ MALI ANG PAGKUHA NG BALITA:", err.message);
-      // ✅ KUNG MAY MALI — MAGBIBIGAY NG HALIMBAWA PARA HINDI WALANG LAMAN!
+      console.error("❌ MALI:", err.message);
       return [
-        { title: "Pansamantalang hindi makakuha ng balita", link: "#", date: new Date().toISOString(), description: "Sinusubukan muli ang pagkuha ng balita. Maghintay ng susunod na update..." },
-        { title: "Kung paulit-ulit itong lumalabas — subukan mamaya", link: "#", date: new Date().toISOString(), description: "Maaaring pansamantalang abala lamang ang pinagkukunan ng balita." }
+        { title: "Pansamantalang hindi makakuha ng balita", link: "#", date: new Date().toISOString(), description: "Subukan ulit mamaya.", larawan: null }
       ];
     }
   });
