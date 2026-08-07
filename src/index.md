@@ -17,7 +17,7 @@ title: "Pilipinas Auto News Portal"
     <!-- BIG HERO BANNER (BALITA 1) -->
     <div style="background: white; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.06); overflow: hidden; display: flex; flex-direction: column; border: 1px solid #e2e8f0;">
       <a href="/news/pagasa-bagong-lpa-sa-labas-ng-par/" style="display: block; width: 100%; overflow: hidden; position: relative;">
-        <img src="https://wikimedia.org" alt="Bagyo" style="width: 100%; height: auto; object-fit: cover; transition: transform 0.3s;">
+        <img src="https://picsum.photos/id/1051/800/400" alt="Bagyo" style="width: 100%; height: auto; object-fit: cover; transition: transform 0.3s;">
         <div style="position: absolute; top: 15px; left: 15px; background: #cc0000; color: white; font-size: 0.75em; font-weight: bold; padding: 4px 10px; border-radius: 4px; text-transform: uppercase;">#WalangPasok</div>
       </a>
       <div style="padding: 25px; flex-grow: 1; background: #111827; color: white;">
@@ -31,7 +31,7 @@ title: "Pilipinas Auto News Portal"
       
       <!-- BALITA 2 -->
       <div style="background: white; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.06); overflow: hidden; display: grid; grid-template-columns: 140px 1fr; border: 1px solid #e2e8f0;">
-        <img src="https://wikimedia.org" alt="Sports" style="width: 100%; height: auto; object-fit: cover;">
+        <img src="https://picsum.photos/id/1060/140/170" alt="Sports" style="width: 100%; height: auto; object-fit: cover;">
         <div style="padding: 15px; display: flex; flex-direction: column; justify-content: center;">
           <span style="font-size: 0.7em; color: #00467f; font-weight: bold; text-transform: uppercase;">SPORTS</span>
           <h4 style="margin: 5px 0 0 0; font-size: 1.1em; line-height: 1.4; font-weight: bold;"><a href="#" style="color: #222; text-decoration: none;">Venus Williams has high praise for 'world star' Alex Eala after tournament match</a></h4>
@@ -40,7 +40,7 @@ title: "Pilipinas Auto News Portal"
 
       <!-- BALITA 3 -->
       <div style="background: white; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.06); overflow: hidden; display: grid; grid-template-columns: 140px 1fr; border: 1px solid #e2e8f0;">
-        <img src="https://wikimedia.org" alt="Entertainment" style="width: 100%; height: auto; object-fit: cover;">
+        <img src="https://picsum.photos/id/1027/140/170" alt="Entertainment" style="width: 100%; height: auto; object-fit: cover;">
         <div style="padding: 15px; display: flex; flex-direction: column; justify-content: center;">
           <span style="font-size: 0.7em; color: #e87722; font-weight: bold; text-transform: uppercase;">ENTERTAINMENT</span>
           <h4 style="margin: 5px 0 0 0; font-size: 1.1em; line-height: 1.4; font-weight: bold;"><a href="#" style="color: #222; text-decoration: none;">Angelica Lopez from Palawan crowned Reina Filipinas Grand International</a></h4>
@@ -55,7 +55,7 @@ title: "Pilipinas Auto News Portal"
     
     <!-- BALITA 4 -->
     <div style="background: white; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.06); overflow: hidden; border: 1px solid #e2e8f0; display: flex; flex-direction: column;">
-      <img src="https://wikimedia.org" alt="Arrest" style="width: 100%; height: auto; object-fit: cover;">
+      <img src="https://picsum.photos/id/1076/600/300" alt="Arrest" style="width: 100%; height: auto; object-fit: cover;">
       <div style="padding: 20px; flex-grow: 1;">
         <span style="font-size: 0.7em; color: #00467f; font-weight: bold; text-transform: uppercase;">NEWSINFO</span>
         <h3 style="margin: 8px 0 0 0; font-size: 1.3em; line-height: 1.4; font-weight: bold;"><a href="/news/lto-babala-pekeng-plaka-fixers/" style="color: #222; text-decoration: none;">10 'maleta boys' arrested at NAIA after failure to post bail over perjury charges</a></h3>
@@ -64,7 +64,7 @@ title: "Pilipinas Auto News Portal"
 
     <!-- BALITA 5 -->
     <div style="background: white; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.06); overflow: hidden; border: 1px solid #e2e8f0; display: flex; flex-direction: column;">
-      <img src="https://wikimedia.org" alt="Davao" style="width: 100%; height: auto; object-fit: cover;">
+      <img src="https://picsum.photos/id/1039/600/300" alt="Davao" style="width: 100%; height: auto; object-fit: cover;">
       <div style="padding: 20px; flex-grow: 1;">
         <span style="font-size: 0.7em; color: #009944; font-weight: bold; text-transform: uppercase;">REGIONAL</span>
         <h3 style="margin: 8px 0 0 0; font-size: 1.3em; line-height: 1.4; font-weight: bold;"><a href="/news/davao-city-council-green-spaces/" style="color: #222; text-decoration: none;">Davao City Council, nagpasa ng bagong ordinansa para sa green spaces ng lungsod</a></h3>
@@ -78,7 +78,7 @@ title: "Pilipinas Auto News Portal"
     
     <!-- BALITA 6 -->
     <div style="background: white; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.06); overflow: hidden; border: 1px solid #e2e8f0; display: flex; flex-direction: column;">
-      <img src="https://wikimedia.org" alt="Market" style="width: 100%; height: auto; object-fit: cover;">
+      <img src="https://picsum.photos/id/1062/400/200" alt="Market" style="width: 100%; height: auto; object-fit: cover;">
       <div style="padding: 15px; flex-grow: 1;">
         <span style="font-size: 0.7em; color: #343a40; font-weight: bold; text-transform: uppercase;">BUSINESS</span>
         <h4 style="margin: 5px 0 0 0; font-size: 1em; line-height: 1.4; font-weight: bold;"><a href="/news/presyo-ng-bilihin-matatag-dti/" style="color: #222; text-decoration: none;">Presyo ng mga bilihin sa bansa nananatiling matatag</a></h4>
@@ -87,7 +87,7 @@ title: "Pilipinas Auto News Portal"
 
     <!-- BALITA 7 -->
     <div style="background: white; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.06); overflow: hidden; border: 1px solid #e2e8f0; display: flex; flex-direction: column;">
-      <img src="https://wikimedia.org" alt="Iloilo" style="width: 100%; height: auto; object-fit: cover;">
+      <img src="https://picsum.photos/id/1035/400/200" alt="Iloilo" style="width: 100%; height: auto; object-fit: cover;">
       <div style="padding: 15px; flex-grow: 1;">
         <span style="font-size: 0.7em; color: #0066cc; font-weight: bold; text-transform: uppercase;">NEWSINFO</span>
         <h4 style="margin: 5px 0 0 0; font-size: 1em; line-height: 1.4; font-weight: bold;"><a href="/news/iloilo-city-pinakaligtas-na-lungsod/" style="color: #222; text-decoration: none;">Iloilo City, kinilala muli bilang isa sa pinakaligtas na bayan</a></h4>
@@ -96,7 +96,7 @@ title: "Pilipinas Auto News Portal"
 
     <!-- BALITA 8 -->
     <div style="background: white; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.06); overflow: hidden; border: 1px solid #e2e8f0; display: flex; flex-direction: column;">
-      <img src="https://wikimedia.org" alt="School" style="width: 100%; height: auto; object-fit: cover;">
+      <img src="https://picsum.photos/id/1040/400/200" alt="School" style="width: 100%; height: auto; object-fit: cover;">
       <div style="padding: 15px; flex-grow: 1;">
         <span style="font-size: 0.7em; color: #4b5563; font-weight: bold; text-transform: uppercase;">EDUCATION</span>
         <h4 style="margin: 5px 0 0 0; font-size: 1em; line-height: 1.4; font-weight: bold;"><a href="/news/deped-kahandaan-bukas-klase/" style="color: #222; text-decoration: none;">DepEd tiniyak ang sapat na silid-aralan sa Lunes</a></h4>
