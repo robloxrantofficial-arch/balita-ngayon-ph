@@ -1,7 +1,7 @@
 name: Auto News Build Schedule
 on:
   schedule:
-    - cron: '0 */3 * * *' # Awtomatikong mag-rebuild kada 3 oras (e.g., 12AM, 3AM, 6AM, 9AM...)
+    - cron: '0 */3 * * *' # Mag-rebuild kada 3 oras (e.g., 12AM, 3AM, 6AM, 9AM...)
   workflow_dispatch:
 jobs:
   build:
