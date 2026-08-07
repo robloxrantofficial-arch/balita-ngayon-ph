@@ -1,6 +1,6 @@
 ---
 layout: layouts/base.njk
-title: "Pilipinas News Portal"
+title: "Pilipinas Auto News Portal"
 ---
 
 ## 📰 Mga Pinakabagong Balita Ngayon
