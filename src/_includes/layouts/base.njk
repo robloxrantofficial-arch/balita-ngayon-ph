@@ -5,7 +5,46 @@
     <meta name="google-site-verification" content="HtvH3JsGA5E_Ks8rlIga8kdOM67AjvlGiPKa6wxHdKQ" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ title if title else "Pilipinas Auto News Portal" }}</title>
-    <link rel="stylesheet" href="/assets/css/style.css">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #f8f9fa;
+            font-family: 'Segoe UI', Arial, sans-serif;
+        }
+        header {
+            background-color: #003366;
+            color: white;
+            padding: 25px 20px;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        header h1 {
+            margin: 0;
+            font-size: 2.2em;
+            font-weight: 800;
+        }
+        header nav {
+            margin-top: 10px;
+        }
+        header nav a {
+            color: #cbd5e1;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 1em;
+        }
+        header nav a:hover {
+            color: white;
+        }
+        footer {
+            text-align: center;
+            padding: 25px;
+            background: #1e293b;
+            color: #94a3b8;
+            margin-top: 50px;
+            font-size: 0.9em;
+        }
+    </style>
 </head>
 <body>
     <header>
@@ -15,12 +54,13 @@
         </nav>
     </header>
     
+    <!-- Tinanggal ang anumang maling flex/grid wrapper para malayang kumalat ang index.md -->
     <main>
         {{ content | safe }}
     </main>
 
     <footer>
-        <p>&copy; 2026 Auto News Aggregator</p>
+        <p>&copy; 2026 Auto News Aggregator. Lahat ng Karapatan ay Rezervado.</p>
     </footer>
 </body>
 </html>
