@@ -1,11 +1,14 @@
 {
-  "name": "balita-ngayon-ph",
+  "name": "eleventy-auto-news",
   "version": "1.0.0",
+  "description": "Auto news website gamit ang Eleventy",
+  "main": ".eleventy.js",
   "scripts": {
-    "build": "eleventy"
+    "build": "npx @11ty/eleventy",
+    "start": "npx @11ty/eleventy --serve"
   },
   "dependencies": {
     "@11ty/eleventy": "^2.0.1",
-    "rss-parser": "^3.13.0"
+    "isomorphic-fetch": "^3.0.0"
   }
 }
