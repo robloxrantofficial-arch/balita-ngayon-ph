@@ -22,7 +22,7 @@ module.exports = function(eleventyConfig) {
     input: "src",
     output: "_site",
     includes: "_includes",
-    layouts: ""     // ← WALANG LAMAN! HINDI NA MAGHAHANAP SA IBANG FOLDER!
+    layouts: "_includes"   // ← DAPAT MAY HALAGA!
   }
 };
 };
