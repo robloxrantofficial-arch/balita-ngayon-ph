@@ -13,7 +13,20 @@ title: "Pilipinas Auto News Portal"
         <li style="margin-bottom: 10px;"><a href="https://www.philstar.com/" target="_blank" style="color:white; text-decoration:none; opacity:0.9;">✅ Philstar</a></li>
         <li style="margin-bottom: 10px;"><a href="https://mb.com.ph/" target="_blank" style="color:white; text-decoration:none; opacity:0.9;">✅ Manila Bulletin</a></li>
         <li style="margin-bottom: 10px;"><a href="https://www.pna.gov.ph/" target="_blank" style="color:white; text-decoration:none; opacity:0.9;">✅ PNA (Gobyerno)</a></li>
-        <li><a href="https://www.rappler.com/" target="_blank" style="color:white; text-decoration:none; opacity:0.9;">✅ Rappler</a></li>
+        <li style="margin-bottom: 10px;"><a href="https://www.gmanetwork.com/news/" target="_blank" style="color:white; text-decoration:none; opacity:0.9;">✅ GMA NEWS</a></li>
+        <li style="margin-bottom: 10px;"><a href="https://www.abs-cbn.com/" target="_blank" style="color:white; text-decoration:none; opacity:0.9;">✅ ABS-CBN</a></li>
+        <li style="margin-bottom: 10px;"><a href="https://www.inquirer.net/" target="_blank" style="color:white; text-decoration:none; opacity:0.9;">✅ Inquirer</a></li>
+        <li style="margin-bottom: 10px;"><a href="https://www.manilatimes.net/" target="_blank" style="color:white; text-decoration:none; opacity:0.9;">✅ Manila Times</a></li>
+        <li style="margin-bottom: 10px;"><a href="https://www.rappler.com/" target="_blank" style="color:white; text-decoration:none; opacity:0.9;">✅ Rappler</a></li>
+        <li style="margin-bottom: 10px;"><a href="https://www.onenews.ph/" target="_blank" style="color:white; text-decoration:none; opacity:0.9;">✅ One News</a></li>
+        <li style="margin-bottom: 10px;"><a href="https://www.sunstar.com.ph/" target="_blank" style="color:white; text-decoration:none; opacity:0.9;">✅ Sun Star</a></li>
+        <li style="margin-bottom: 10px;"><a href="https://www.congress.gov.ph/" target="_blank" style="color:white; text-decoration:none; opacity:0.9;">✅ Congress</a></li>
+        <li style="margin-bottom: 10px;"><a href="https://manilastandard.net/" target="_blank" style="color:white; text-decoration:none; opacity:0.9;">✅ Manila Standard</a></li>
+        <li style="margin-bottom: 10px;"><a href="https://entertainment.inquirer.net/" target="_blank" style="color:white; text-decoration:none; opacity:0.9;">✅ Entertainment</a></li>
+        <li style="margin-bottom: 10px;"><a href="https://www.cosmo.ph/tag/celebrity-scandals/" target="_blank" style="color:white; text-decoration:none; opacity:0.9;">✅ Celebrity Scandals</a></li>
+        <li style="margin-bottom: 10px;"><a href="https://www.jstor.org/" target="_blank" style="color:white; text-decoration:none; opacity:0.9;">✅ Celebrity Sex Scandals</a></li>
+        <li style="margin-bottom: 10px;"><a href="https://www.buzzfeed.com/" target="_blank" style="color:white; text-decoration:none; opacity:0.9;">✅ Celebrity XXX</a></li>
+        <li><a href="https://tribune.net.ph/" target="_blank" style="color:white; text-decoration:none; opacity:0.9;">✅ Tribune</a></li>
       </ul>
     </div>
     <div style="background:#f8fafc; border:2px solid #e2e8f0; border-radius:12px; padding:20px; box-shadow:0 4px 15px rgba(0,0,0,0.05);">
