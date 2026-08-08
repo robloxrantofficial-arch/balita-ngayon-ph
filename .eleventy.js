@@ -6,18 +6,18 @@ module.exports = function(eleventyConfig) {
   eleventyConfig.addPassthroughCopy("src/assets/css");
   eleventyConfig.addPassthroughCopy("sw.js");
 
-  // 🛡️ DALAWANG URI NG PROXY — KUNG HINDI GUMANA ANG UNA, SUSUBOK ANG PANGALAWA!
-  const gamitProxy = (url) => {
-    if(!url) return null;
-    if(url.startsWith("data:") || url.includes("allorigins.win") || url.includes("corsproxy.io")) return url;
-    return `https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`;
+  // 🛡️ DALAWANG URI NG PROXY — MAY PAGSUSURI MUNA!
+  const gamitProxy = (linkUrl) => {
+    if(!linkUrl) return null; // ← HINDI NA SUSUBOK KUNG WALANG LAMAN
+    if(linkUrl.startsWith("data:") || linkUrl.includes("allorigins.win") || linkUrl.includes("corsproxy.io")) return linkUrl;
+    return `https://api.allorigins.win/raw?url=${encodeURIComponent(linkUrl)}`;
   };
-  const altProxy = (url) => {
-    if(!url) return null;
-    return `https://corsproxy.io/?${encodeURIComponent(url)}`;
+  const altProxy = (linkUrl) => {
+    if(!linkUrl) return null; // ← PROTEKSIYON DIN DITO
+    return `https://corsproxy.io/?${encodeURIComponent(linkUrl)}`;
   };
 
-  // 🖼️ MATATAG NA PAGKUHA NG LARAWAN + MAY IBA'T IBANG KAPALIT NA LARAWAN
+  // 🖼️ MATATAG NA PAGKUHA NG LARAWAN + MAY PAGSUSURI SA LAHAT NG BAHAGI
   const kuninLahatMedia = (item) => {
     const nakuha = {
       pangunahingLarawan: null,
@@ -26,11 +26,11 @@ module.exports = function(eleventyConfig) {
       videoLink: null
     };
 
-    // 1. Direktang media:content
-    if(item["media:content"]){
+    // 1. Direktang media:content — sinusuri kung may url muna
+    if(item?.["media:content"]){
       const mc = Array.isArray(item["media:content"]) ? item["media:content"] : [item["media:content"]];
       for(const m of mc){
-        if(m.url && m.type?.startsWith("image/")){
+        if(m?.url && m.type?.startsWith("image/")){
           nakuha.pangunahingLarawan = gamitProxy(m.url);
           nakuha.listahanLarawan.push(nakuha.pangunahingLarawan);
           break;
@@ -38,15 +38,15 @@ module.exports = function(eleventyConfig) {
       }
     }
 
-    // 2. media:thumbnail
-    if(!nakuha.pangunahingLarawan && item["media:thumbnail"]?.url){
+    // 2. media:thumbnail — ligtas na pagbasa
+    if(!nakuha.pangunahingLarawan && item?.["media:thumbnail"]?.url){
       nakuha.pangunahingLarawan = gamitProxy(item["media:thumbnail"].url);
       nakuha.listahanLarawan.push(nakuha.pangunahingLarawan);
     }
 
     // 3. Hanapin sa loob ng nilalaman
     if(!nakuha.pangunahingLarawan){
-      const buongTeksto = item["content:encoded"] || item.content || item.description || "";
+      const buongTeksto = item?.["content:encoded"] || item?.content || item?.description || "";
       const tugmaLahatImg = buongTeksto.matchAll(/<img[^>]+src\s*=\s*["']([^"']+\.(jpg|jpeg|png|webp))["']/gi);
       const mgaImg = Array.from(tugmaLahatImg, m=>m[1]);
       if(mgaImg.length > 0){
@@ -55,9 +55,9 @@ module.exports = function(eleventyConfig) {
       }
     }
 
-    // ✨ IBA'T IBANG KAPALIT NA LARAWAN — ayon sa paksa + nagpapalit-palit!
-    const pamagat = (item.pamagat || "").toString();
-    const buod = (item.buod || "").toString();
+    // ✨ IBA'T IBANG KAPALIT NA LARAWAN — tugma sa bawat kategorya kasama na ang artista/showbiz
+    const pamagat = (item?.pamagat || "").toString();
+    const buod = (item?.buod || "").toString();
     const pamagatAtBuod = (pamagat + " " + buod).toLowerCase();
 
     const listahanKapalit = [
@@ -72,14 +72,12 @@ module.exports = function(eleventyConfig) {
     ];
 
     let napilingKapalit = null;
-    // Pumili ng akma sa paksa
     for(const k of listahanKapalit){
       if(k.susi.length > 0 && k.susi.some(kw=>pamagatAtBuod.includes(kw))){
         napilingKapalit = k.litrato;
         break;
       }
     }
-    // Kung walang tugma: magpalit gamit hash ng pamagat para magkakaiba
     if(!napilingKapalit){
       const hash = [...pamagat].reduce((sum,ch)=>sum+ch.charCodeAt(0),0);
       napilingKapalit = listahanKapalit.slice(4)[hash % (listahanKapalit.length-4)].litrato;
@@ -92,7 +90,7 @@ module.exports = function(eleventyConfig) {
     return nakuha;
   };
 
-  // ⏱️ Maikling paghihintay para hindi harangan
+  // ⏱️ Maikling paghihintay
   const antala = ms => new Promise(r=>setTimeout(r,ms));
 
   eleventyConfig.addGlobalData("balita", async function() {
@@ -125,11 +123,13 @@ module.exports = function(eleventyConfig) {
         }catch(e){
           try{
             console.log(`🔁 Gamit unang proxy para sa: ${urlPinagkunan}`);
-            feed = await parser.parseURL(gamitProxy(urlPinagkunan));
+            const proxyUrl1 = gamitProxy(urlPinagkunan);
+            if(proxyUrl1) feed = await parser.parseURL(proxyUrl1); // ← GAMIT LANG KUNG MAY NABUO
           }catch(e2){
             try{
               console.log(`🔁 Lumipat pangalawang proxy para sa: ${urlPinagkunan}`);
-              feed = await parser.parseURL(altProxy(urlPinagkunan));
+              const proxyUrl2 = altProxy(urlPinagkunan);
+              if(proxyUrl2) feed = await parser.parseURL(proxyUrl2); // ← GAMIT LANG KUNG MAY NABUO
             }catch(e3){
               console.log(`❌ HINDI MAKUHA: ${urlPinagkunan} — ${e3.message}`);
               continue;
@@ -137,10 +137,13 @@ module.exports = function(eleventyConfig) {
           }
         }
 
+        // ✅ HINDI NA TUTULOY KUNG WALANG NA-RETURN NA FEED
+        if(!feed?.items) continue;
+
         console.log(`✅ NAKUHA: ${urlPinagkunan} — ${feed.items.length} balita`);
         feed.items.forEach(item=>{
-          const malinisNaPamagat = (item.title?.trim() || "Walang Pamagat").toString();
-          const malinisNaBuod = (item["content:encoded"]||item.description||"")
+          const malinisNaPamagat = (item?.title?.trim() || "Walang Pamagat").toString();
+          const malinisNaBuod = (item?.["content:encoded"]||item?.description||"")
             .replace(/<script[^>]*>[\s\S]*?<\/script>/gi,"")
             .replace(/<style[^>]*>[\s\S]*?<\/style>/gi,"")
             .replace(/<[^>]+>/g," ")
@@ -149,8 +152,8 @@ module.exports = function(eleventyConfig) {
 
           lahatBalita.push({
             pamagat: malinisNaPamagat,
-            link: item.link || "#",
-            petsa: new Date(item.pubDate || Date.now()),
+            link: item?.link || "#",
+            petsa: new Date(item?.pubDate || Date.now()),
             buod: malinisNaBuod,
             pangunahingLarawan: null,
             ibaPangLarawan: [],
@@ -158,7 +161,7 @@ module.exports = function(eleventyConfig) {
           });
         });
 
-        // 🖼️ Kumuha ng mga larawan matapos mabuo ang datos
+        // 🖼️ Kumuha ng mga larawan
         lahatBalita.forEach(item=>{
           const media = kuninLahatMedia(item);
           item.pangunahingLarawan = media.pangunahingLarawan;
@@ -170,12 +173,19 @@ module.exports = function(eleventyConfig) {
       lahatBalita.sort((a,b)=>b.petsa - a.petsa);
       const natatangi = Array.from(new Map(lahatBalita.map(i=>[i.pamagat,i]))).map(m=>m[1]);
 
-      // 🎯 MAY BAGONG KATEGORYA: ARTISTA AT SIKAT NA BALITA ✅
-      const queryData = url.parse(this.page.url, true).query;
-      const pili = queryData.kategorya || "lahat";
+      // 🎯 MAY KASAMANG ARTISTA/SHOWBIZ NA KATEGORYA + LIGTAS NA PAGBASA NG QUERY
+      let pili = "lahat";
+      try{
+        if(this?.page?.url){
+          const queryData = url.parse(this.page.url, true).query;
+          pili = queryData?.kategorya || "lahat";
+        }
+      }catch(eq){
+        console.log("ℹ️ Walang nabasang kategorya, ipapakita lahat");
+      }
 
       const napilingBalita = natatangi.filter(item => {
-        const buongTeksto = ((item.pamagat || "") + " " + (item.buod || "")).toLowerCase();
+        const buongTeksto = ((item?.pamagat || "") + " " + (item?.buod || "")).toLowerCase();
         switch(pili){
           case "pambansa":
             return buongTeksto.includes("pilipinas") || buongTeksto.includes("bansa") || buongTeksto.includes("gobyerno") || buongTeksto.includes("pambansa") || buongTeksto.includes("nasyonal");
@@ -185,7 +195,7 @@ module.exports = function(eleventyConfig) {
             return buongTeksto.includes("kotse") || buongTeksto.includes("sasakyan") || buongTeksto.includes("bus") || buongTeksto.includes("tren") || buongTeksto.includes("kalsada") || buongTeksto.includes("transport");
           case "kabuhayan":
             return buongTeksto.includes("pera") || buongTeksto.includes("kita") || buongTeksto.includes("presyo") || buongTeksto.includes("trabaho") || buongTeksto.includes("negosyo") || buongTeksto.includes("ekonomiya");
-          case "artista": // ← BAGONG DAGDAG
+          case "artista":
             return buongTeksto.includes("artista") || buongTeksto.includes("sikat") || buongTeksto.includes("kilala") ||
                    buongTeksto.includes("showbiz") || buongTeksto.includes("pelikula") || buongTeksto.includes("programa") ||
                    buongTeksto.includes("parangal") || buongTeksto.includes("kaganapan") ||
