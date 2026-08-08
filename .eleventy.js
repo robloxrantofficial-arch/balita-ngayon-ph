@@ -17,7 +17,7 @@ module.exports = function(eleventyConfig) {
     return `https://corsproxy.io/?${encodeURIComponent(url)}`;
   };
 
-  // 🖼️ PINAKAMATATAG NA PAGKUHA + MAY IBA'T IBANG KAPALIT NA LARAWAN + MAY PROTEKSYON
+  // 🖼️ MATATAG NA PAGKUHA NG LARAWAN + MAY IBA'T IBANG KAPALIT NA LARAWAN
   const kuninLahatMedia = (item) => {
     const nakuha = {
       pangunahingLarawan: null,
@@ -55,8 +55,8 @@ module.exports = function(eleventyConfig) {
       }
     }
 
-    // ✨ MAY PROTEKSYON: TIYAK NA TEKSTO LANG ANG GAGAMITIN
-    const pamagat = (item.pamagat || "").toString(); // ← TIYAK NA TEKSTO, HINDI MAGIGING WALANG KAHULUGAN
+    // ✨ IBA'T IBANG KAPALIT NA LARAWAN — ayon sa paksa + nagpapalit-palit!
+    const pamagat = (item.pamagat || "").toString();
     const buod = (item.buod || "").toString();
     const pamagatAtBuod = (pamagat + " " + buod).toLowerCase();
 
@@ -65,6 +65,7 @@ module.exports = function(eleventyConfig) {
       {susi:["transport","kalsada","kotse","bus","tren","sasakyan"], litrato:"https://images.unsplash.com/photo-1449824913935-59a10b8d2000?w=800&h=400&fit=crop"},
       {susi:["negosyo","pera","kita","presyo","trabaho","ekonomiya","kabuhayan"], litrato:"https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=800&h=400&fit=crop"},
       {susi:["bansa","pamahalaan","gobyerno","pilipinas","pambansa","nasyonal"], litrato:"https://images.unsplash.com/photo-1529107386315-e1a2ed45a6d8?w=800&h=400&fit=crop"},
+      {susi:["artista","showbiz","sikat","pelikula","aliw"], litrato:"https://images.unsplash.com/photo-1493225215050-0b468c4c7e74?w=800&h=400&fit=crop"},
       {susi:[], litrato:"https://images.unsplash.com/photo-1504711434969-e33886168f5c?w=800&h=400&fit=crop"},
       {susi:[], litrato:"https://images.unsplash.com/photo-1550751827-4bd374c3f58b?w=800&h=400&fit=crop"},
       {susi:[], litrato:"https://images.unsplash.com/photo-1432821596592-e2c18b78144f?w=800&h=400&fit=crop"}
@@ -78,7 +79,7 @@ module.exports = function(eleventyConfig) {
         break;
       }
     }
-    // Kung walang tugma: gumamit ng pamagat bilang batayan (tiyak na teksto na!)
+    // Kung walang tugma: magpalit gamit hash ng pamagat para magkakaiba
     if(!napilingKapalit){
       const hash = [...pamagat].reduce((sum,ch)=>sum+ch.charCodeAt(0),0);
       napilingKapalit = listahanKapalit.slice(4)[hash % (listahanKapalit.length-4)].litrato;
@@ -147,18 +148,18 @@ module.exports = function(eleventyConfig) {
             .trim().substring(0,220)+"...";
 
           lahatBalita.push({
-            pamagat: malinisNaPamagat, // ← TIYAK NA LAGING MAY TEKSTO
+            pamagat: malinisNaPamagat,
             link: item.link || "#",
             petsa: new Date(item.pubDate || Date.now()),
             buod: malinisNaBuod,
-            pangunahingLarawan: null, // ← Ilagay muna, kukunin sa susunod na linya
+            pangunahingLarawan: null,
             ibaPangLarawan: [],
             pinagmulan: urlPinagkunan.includes("google") ? "GOOGLE NEWS PH" : "RAPPLER"
           });
         });
 
-        // 📌 KUNIN ANG LARAWAN PAGKATAPOS MAKABUO ANG LAHAT NG DATOS — HINDI NA MAGKAKAMALI!
-        lahatBalita.forEach(async (item)=>{
+        // 🖼️ Kumuha ng mga larawan matapos mabuo ang datos
+        lahatBalita.forEach(item=>{
           const media = kuninLahatMedia(item);
           item.pangunahingLarawan = media.pangunahingLarawan;
           item.ibaPangLarawan = media.listahanLarawan;
@@ -169,7 +170,7 @@ module.exports = function(eleventyConfig) {
       lahatBalita.sort((a,b)=>b.petsa - a.petsa);
       const natatangi = Array.from(new Map(lahatBalita.map(i=>[i.pamagat,i]))).map(m=>m[1]);
 
-      // 🎯 PAGSALA NG BALITA — MAY PROTEKSYON DIN DITO
+      // 🎯 MAY BAGONG KATEGORYA: ARTISTA AT SIKAT NA BALITA ✅
       const queryData = url.parse(this.page.url, true).query;
       const pili = queryData.kategorya || "lahat";
 
@@ -184,6 +185,11 @@ module.exports = function(eleventyConfig) {
             return buongTeksto.includes("kotse") || buongTeksto.includes("sasakyan") || buongTeksto.includes("bus") || buongTeksto.includes("tren") || buongTeksto.includes("kalsada") || buongTeksto.includes("transport");
           case "kabuhayan":
             return buongTeksto.includes("pera") || buongTeksto.includes("kita") || buongTeksto.includes("presyo") || buongTeksto.includes("trabaho") || buongTeksto.includes("negosyo") || buongTeksto.includes("ekonomiya");
+          case "artista": // ← BAGONG DAGDAG
+            return buongTeksto.includes("artista") || buongTeksto.includes("sikat") || buongTeksto.includes("kilala") ||
+                   buongTeksto.includes("showbiz") || buongTeksto.includes("pelikula") || buongTeksto.includes("programa") ||
+                   buongTeksto.includes("parangal") || buongTeksto.includes("kaganapan") ||
+                   (buongTeksto.includes("isyung") && (buongTeksto.includes("artista") || buongTeksto.includes("sikat")));
           case "iba":
             return true;
           default:
