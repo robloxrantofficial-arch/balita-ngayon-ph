@@ -82,21 +82,30 @@ title: "Pilipinas Auto News Portal"
   </div>
 
 
-  <!-- 🟩 KANANG GILID: MGA KATEGORYA -->
+  <!-- 🟩 KANANG GILID: MGA KATEGORYA NA MAY GUMAGANANG KILOS -->
   <div>
     <div style="background:#f8fafc; border:2px solid #e2e8f0; border-radius:12px; padding:20px; box-shadow:0 4px 15px rgba(0,0,0,0.05); margin-bottom:25px;">
       <h3 style="color:#00467f; border-bottom:2px solid #00467f50; padding-bottom:10px; margin-top:0; font-size:1.2em;">📌 MGA KATEGORYA</h3>
       <ul style="list-style:none; padding:0; margin:15px 0;">
-        <li style="padding:6px 0; border-bottom:1px dashed #cbd5e1;"><a href="#" style="color:#00467f; text-decoration:none; font-weight:bold;">✅ Pambansang Balita</a></li>
-        <li style="padding:6px 0; border-bottom:1px dashed #cbd5e1;"><a href="#" style="color:#00467f; text-decoration:none; font-weight:bold;">🌤️ Ulat Panahon</a></li>
-        <li style="padding:6px 0; border-bottom:1px dashed #cbd5e1;"><a href="#" style="color:#00467f; text-decoration:none; font-weight:bold;">🚗 Sasakyan at Transportasyon</a></li>
-        <li style="padding:6px 0; border-bottom:1px dashed #cbd5e1;"><a href="#" style="color:#00467f; text-decoration:none; font-weight:bold;">💼 Kabuhayan at Negosyo</a></li>
-        <li style="padding:6px 0;"><a href="#" style="color:#00467f; text-decoration:none; font-weight:bold;">📰 Iba pang Napapanahong Isyu</a></li>
+        <li style="padding:6px 0; border-bottom:1px dashed #cbd5e1;">
+          <a href="?kategorya=pambansa" style="color:#00467f; text-decoration:none; font-weight:bold; cursor:pointer;">✅ Pambansang Balita</a>
+        </li>
+        <li style="padding:6px 0; border-bottom:1px dashed #cbd5e1;">
+          <a href="?kategorya=panahon" style="color:#00467f; text-decoration:none; font-weight:bold; cursor:pointer;">🌤️ Ulat Panahon</a>
+        </li>
+        <li style="padding:6px 0; border-bottom:1px dashed #cbd5e1;">
+          <a href="?kategorya=sasakyan" style="color:#00467f; text-decoration:none; font-weight:bold; cursor:pointer;">🚗 Sasakyan at Transportasyon</a>
+        </li>
+        <li style="padding:6px 0; border-bottom:1px dashed #cbd5e1;">
+          <a href="?kategorya=kabuhayan" style="color:#00467f; text-decoration:none; font-weight:bold; cursor:pointer;">💼 Kabuhayan at Negosyo</a>
+        </li>
+        <li style="padding:6px 0;">
+          <a href="?kategorya=iba" style="color:#00467f; text-decoration:none; font-weight:bold; cursor:pointer;">📰 Iba pang Napapanahong Isyu</a>
+        </li>
       </ul>
     </div>
     <div style="background:linear-gradient(180deg,#00467f,#2a6fb8); border-radius:12px; padding:20px; color:white; box-shadow:0 4px 15px rgba(0,70,127,0.2);">
       <h3 style="border-bottom:2px solid #ffffff60; padding-bottom:10px; margin-top:0; font-size:1.2em;">📅 NGAYONG ARAW</h3>
-      <!-- ✅ INAYOS: Walang nawawalang filter na ginamit -->
       <div style="background:#ffffff20; padding:12px; border-radius:6px; text-align:center; font-weight:bold; margin-top:15px;">
         {{ "now" | formatDate }}
       </div>
