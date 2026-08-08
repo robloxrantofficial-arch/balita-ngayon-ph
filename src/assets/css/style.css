@@ -1,28 +1,48 @@
 /* 📦 Karton ng bawat balita - kontroladong puwang at hindi lumalaki nang walang dahilan */
 .card-balita {
   max-width: 100%;
-  margin: 12px auto !important; /* ✅ Tamang pagitan - hindi na sobrang layo */
+  margin: 12px auto !important;
   padding: 15px;
   box-sizing: border-box;
   overflow: hidden;
   border-radius: 8px;
   box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  background-color: #ffffff; /* ✅ Matibay na puting likuran ng kabuuan */
 }
 
-/* 🖼️ Larawan - pare-parehong sukat, maayos na pagpuno */
+/* 🖼️ Larawan - pare-parehong sukat + PANSAMANTALANG MAPUSYAW NA KULAY habang naglo-load/nabigo */
 .card-balita img {
   width: 100%;
-  height: 400px; /* ✅ Tugma sa sukat ng mga litrato sa kodigo */
+  height: 400px;
+  max-height: 400px; /* ✅ Hindi hihigit sa itinakda */
   object-fit: cover;
   object-position: center;
   display: block; /* ✅ Alis nakatagong puwang sa ilalim ng larawan */
+  background-color: #e9ecef; /* ✅ PINAKAMAHALAGA: Mapusyaw na kulay kapalit ng ITIM na puwang! */
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+  transition: opacity 0.3s ease; /* ✅ Makinis na paglitaw, hindi biglang lilitaw */
 }
 
-/* 📄 Teksto/Buod - limitadong taas, malinis na ayos */
+/* 📱 Karagdagang ayos para sa telepono/mas maliit na screen — hindi sobrang taas na nagpapalaki ng puwang */
+@media (max-width: 768px) {
+  .card-balita img {
+    height: 250px; /* ✅ Mas angkop na taas sa maliit na kagamitan */
+  }
+}
+@media (max-width: 480px) {
+  .card-balita img {
+    height: 180px; /* ✅ Mas maikli pa para sa maliliit na telepono */
+  }
+}
+
+/* 📄 Teksto/Buod - limitadong taas, malinis na ayos, walang biglang paglaki */
 .buod-balita {
   max-height: 5em;
   overflow: hidden;
   line-height: 1.5;
   margin: 0;
   padding: 5px 0;
+  color: #333333; /* ✅ Malinaw na kulay ng sulat */
 }
