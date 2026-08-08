@@ -63,7 +63,6 @@ title: "Pilipinas Auto News Portal"
           
           <p style="font-size:1.05em; color:#64748b; margin:0 0 18px 0;">📅 {{ item.petsa | formatDate }}</p>
           
-          <!-- ✅ TAMANG PAG-ALIS NG &nbsp; WALANG PAGKAKAMALI -->
           {% set malinisNaBuod = item.buod | replace("&nbsp;", " ") %}
           <p style="font-size:1.1em; color:#334155; line-height:1.7; margin:0;">{{ malinisNaBuod }}</p>
 
@@ -97,7 +96,10 @@ title: "Pilipinas Auto News Portal"
     </div>
     <div style="background:linear-gradient(180deg,#00467f,#2a6fb8); border-radius:12px; padding:20px; color:white; box-shadow:0 4px 15px rgba(0,70,127,0.2);">
       <h3 style="border-bottom:2px solid #ffffff60; padding-bottom:10px; margin-top:0; font-size:1.2em;">📅 NGAYONG ARAW</h3>
-      <div style="background:#ffffff20; padding:12px; border-radius:6px; text-align:center; font-weight:bold; margin-top:15px;">{{ "now" | date("%B %d, %Y") }}</div>
+      <!-- ✅ INAYOS: Walang nawawalang filter na ginamit -->
+      <div style="background:#ffffff20; padding:12px; border-radius:6px; text-align:center; font-weight:bold; margin-top:15px;">
+        {{ "now" | formatDate }}
+      </div>
     </div>
   </div>
 
