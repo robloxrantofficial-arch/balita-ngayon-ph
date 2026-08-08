@@ -1,24 +1,25 @@
-body {
-    background-color: #f8f9fa;
-    margin: 0;
-    padding: 0;
+/* 📦 KARTON NG BALITA — TIYAK NA HANGGANAN, HINDI LUMALAKI NANG WALANG DAHIL */
+.card-balita {
+  max-width: 100%;
+  margin: 12px auto !important; /* ✅ MULA SA SOBRANG LAKI → 12px LANG ANG PAGITAN */
+  padding: 15px;
+  box-sizing: border-box;
+  overflow: hidden; /* ✅ ITIGIL ANG PAGLABAS NG LAMAN NA NAGPAPALAKI NG KARTON */
 }
-header {
-    background-color: #003366;
-    color: white;
-    padding: 20px;
-    text-align: center;
+
+/* 🖼️ LARAWAN — TIYAK NA PARE-PAREHONG TAAS AT LAPAD */
+.card-balita img {
+  width: 100%;
+  height: 400px; /* ✅ TIYAK NA TAAS — pareho sa sukat ng link ng litrato */
+  object-fit: cover; /* ✅ PUPUNUIN ANG LAKI HINDI MAGPAPALAKI NG KARTON */
+  object-position: center;
+  display: block; /* ✅ ALISIN ANG MGA NAKATAGONG MGA PUWANG SA ILALIM NG LARAWAN */
 }
-header nav a {
-    color: white;
-    text-decoration: none;
-    font-weight: bold;
+
+/* 📄 TEKSTO — LIMITADONG TAAS HINDI LUMALAWAK HANGGANG KAYA */
+.buod-balita {
+  max-height: 5em;
+  overflow: hidden;
+  line-height: 1.5;
+  margin: 0; /* ✅ ALISIN ANG DAGDAG NA PUWANG */
 }
-footer {
-    text-align: center;
-    padding: 20px;
-    background: #333;
-    color: white;
-    margin-top: 40px;
-}
-/* Binura at nilinis ang lahat ng lumang grid restrictions */
