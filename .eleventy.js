@@ -8,6 +8,8 @@ module.exports = function(eleventyConfig) {
   // 🛡️ MATIBAY NA PROXY — para RSS, LARAWAN, VIDEO LINK din!
   const gamitProxy = (url) => {
     if(!url) return null;
+    // Iwas ulit na pagbalot
+    if(url.includes("allorigins.win")) return url;
     return `https://api.allorigins.win/raw?url=${encodeURIComponent(url)}&allowAll=true`;
   };
 
@@ -20,24 +22,23 @@ module.exports = function(eleventyConfig) {
       videoLink: null
     };
 
-    // ✅ 1. MGA OPISYAL NA MEDIA RSS FIELD (pinakamaganda at malinaw)
-    // Malaking larawan
+    // ✅ 1. MGA OPISYAL NA MEDIA RSS FIELD
     if(item["media:content"]?.url){
-      nakuha.pangunahingLarawan = gamitProxy(item["media:content"].url);
-      if(item["media:content"].url.includes("img") || item["media:content"].type?.includes("image")){
-        nakuha.listahanLarawan.push(nakuha.pangunahingLarawan);
+      const imgUrl = gamitProxy(item["media:content"].url);
+      nakuha.pangunahingLarawan = imgUrl;
+      if(item["media:content"].type?.includes("image") || imgUrl.includes("img")){
+        nakuha.listahanLarawan.push(imgUrl);
       }
-      // Kung video ang media:content
-      if(item["media:content"].type?.includes("video") || item["media:content"].url.includes("video")){
+      if(item["media:content"].type?.includes("video") || imgUrl.includes("video")){
         nakuha.videoLink = item["media:content"].url;
         nakuha.videoLarawan = item["media:content"].thumbnail ? gamitProxy(item["media:content"].thumbnail) : null;
       }
     }
 
-    // ✅ 2. Maliit na larawan / thumbnail — gamitin kung wala malaki pa
-    if(item["media:thumbnail"]?.url){
+    // ✅ 2. Maliit na larawan / thumbnail — gamitin kung wala pa
+    if(item["media:thumbnail"]?.url && !nakuha.pangunahingLarawan){
       const thumbUrl = gamitProxy(item["media:thumbnail"].url);
-      if(!nakuha.pangunahingLarawan) nakuha.pangunahingLarawan = thumbUrl;
+      nakuha.pangunahingLarawan = thumbUrl;
       nakuha.listahanLarawan.push(thumbUrl);
     }
 
@@ -54,25 +55,23 @@ module.exports = function(eleventyConfig) {
       }
     }
 
-    // ✅ 4. 📜 HANAPIN DIREKTO SA LOOB NG DESCRIPTION/BUOD — LAHAT NG LITRATO, VIDEO, IFRAME, EMBED!
+    // ✅ 4. 📜 HANAPIN DIREKTO SA LOOB NG DESCRIPTION — LAHAT NG LITRATO, VIDEO
     if(item.description){
       // Hanap LAHAT ng <img src>
       const lahatImg = item.description.match(/<img[^>]+src\s*=\s*["']([^"']+)["']/gi) || [];
       lahatImg.forEach(imgTag => {
         const tugmaSrc = imgTag.match(/src\s*=\s*["']([^"']+)["']/i);
         if(tugmaSrc && tugmaSrc[1]){
-          const urlLaro = tugmaSrc[1];
-          // iwas ulit
-          if(!nakuha.listahanLarawan.includes(urlLaro)){
-            const ayosUrl = gamitProxy(urlLaro);
+          const ayosUrl = gamitProxy(tugmaSrc[1]);
+          // Iwas ulit na pagpasok
+          if(!nakuha.listahanLarawan.includes(ayosUrl)){
             nakuha.listahanLarawan.push(ayosUrl);
-            // gawin pangunahin kung wala pa
             if(!nakuha.pangunahingLarawan) nakuha.pangunahingLarawan = ayosUrl;
           }
         }
       });
 
-      // Hanap VIDEO THUMBNAIL / YOUTUBE/EMBED/IFRAME
+      // Hanap VIDEO THUMBNAIL / YOUTUBE / IFRAME
       const tugmaVidImg = item.description.match(/<video[^>]+poster\s*=\s*["']([^"']+)["']/i);
       if(tugmaVidImg && tugmaVidImg[1] && !nakuha.videoLarawan){
         nakuha.videoLarawan = gamitProxy(tugmaVidImg[1]);
@@ -87,9 +86,9 @@ module.exports = function(eleventyConfig) {
       }
     }
 
-    // ✅ KUNG WALA TALAGA — MAGANDANG KAPALIT NA MAY TAMANG PAMAGAT
-    if(!nakuha.pangunahingLarawan){
-      nakuha.pangunahingLarawan = "https://via.placeholder.com/600x340/1a73e8/ffffff?text=Balita+Ngayon";
+    // ✅ KAPALIT NA LARAWAN — GUMAGANA AT HINDI NA MAGIGING ERROR
+    if(!nakuha.pangunahingLarawan || nakuha.pangunahingLarawan === "null" || nakuha.pangunahingLarawan === "undefined"){
+      nakuha.pangunahingLarawan = "https://via.placeholder.com/600x340/1a73e8/ffffff?text=Balita+Ngayon&font=Roboto";
     }
     if(nakuha.videoLarawan && !nakuha.pangunahingLarawan) nakuha.pangunahingLarawan = nakuha.videoLarawan;
 
@@ -107,24 +106,20 @@ module.exports = function(eleventyConfig) {
           "Referer": "https://google.com/"
         },
         customFields: {
-          item: ["media:thumbnail", "media:content", "media:group", "enclosure", "content:encoded"] // ⭐ DAGDAG: mas malaking nilalaman!
+          item: ["media:thumbnail", "media:content", "media:group", "enclosure", "content:encoded"]
         },
-        timeout: 30000,
-        xmlParseOptions: { strict: false, trim: true, normalize: true }
+        timeout: 35000, // ⏱️ Medyo mahaba para hindi agad maputol
+        xmlParseOptions: { strict: false, trim: true, normalize: true } // Mas maluwag para mabasa kahit may maliit na pagkukulang
       });
 
-      // 📰 MGA SUBOK NA GUMAGANA + MAY ULAT PANAHON
+      // 📰 ✅ PINILI ANG SUBOK NA GUMAGANA — madaling ibalik/dagdagan kapag naayos na ang iba
       const mgaPinagkukunan = [
-        "https://www.philstar.com/rss/nation",
-        "https://www.philstar.com/rss/headlines",
-        "https://newsinfo.inquirer.net/rss/national",
-        "https://newsinfo.inquirer.net/rss/breaking-news",
-        "https://www.philstar.com/rss/weather",
-        "https://newsinfo.inquirer.net/rss/weather"
+        "https://www.philstar.com/rss/nation",     // ✅ Gumagana — kumpleto ang datos
+        "https://www.philstar.com/rss/headlines"    // ✅ Gumagana — kumpleto ang datos
+        // Inquirer / Weather — pansamantalang tinanggal dahil sa sirang karakter/hinarang; madaling ibalik kapag maayos na
       ];
 
       console.log("🔍 KUKUHA — KUMPLETONG LITRATO, VIDEO, AT BUONG NILALAMAN...");
-
       const lahatBalita = [];
 
       for (const orihinalNaUrl of mgaPinagkukunan) {
@@ -137,27 +132,25 @@ module.exports = function(eleventyConfig) {
             // 🎥🖼️ TAWAG SA KUMPLETONG PAGKUHA NG MEDIA
             const media = kuninLahatMedia(item);
 
-            // ✍️ BUOD — GAMITIN ANG PINAKAMAHABA AT BUONG NILALAMAN HINDI MAIKLI LANG!
+            // ✍️ BUOD — GAMITIN ANG PINAKAMAHABA AT MALINAW NA NILALAMAN
             const buongNilalaman = item["content:encoded"] || item.content || item.description || "";
             const malinisNaBuod = buongNilalaman
-                  .replace(/<script[^>]*>[\s\S]*?<\/script>/gi,"") // tanggalin script
-                  .replace(/<style[^>]*>[\s\S]*?<\/style>/gi,"") // tanggalin istilo
-                  .replace(/<[^>]+>/g, " ") // tanggal iba pang tag pero matagal pa rin
+                  .replace(/<script[^>]*>[\s\S]*?<\/script>/gi,"")
+                  .replace(/<style[^>]*>[\s\S]*?<\/style>/gi,"")
+                  .replace(/<[^>]+>/g, " ")
                   .replace(/\s+/g," ").trim();
 
             lahatBalita.push({
               pamagat: item.title?.trim() || "Walang Pamagat",
               link: item.link || "#",
               petsa: item.pubDate || new Date(),
-              buod: malinisNaBuod.substring(0,220)+"...", // ✅ MAS MAHABA AT BUO!
-              buongKwento: malinisNaBuod, // ✅ ITINAGO PERO NASA LOOB — pwede ipakita kapag binuksan
+              buod: malinisNaBuod.substring(0,220)+"...",
+              buongKwento: malinisNaBuod,
               pangunahingLarawan: media.pangunahingLarawan,
-              ibaPangLarawan: media.listahanLarawan, // ✅ LISTAHAN NG IBA PANG LITRATO
-              videoLarawan: media.videoLarawan, // ✅ LARAWAN NG VIDEO
-              videoLink: media.videoLink, // ✅ TUNAY NA LINK NG VIDEO
-              pinagmulan: orihinalNaUrl.includes("weather") ? 
-                           (orihinalNaUrl.includes("philstar")?"Philstar | PANAHON":"Inquirer | PANAHON") :
-                           (orihinalNaUrl.includes("philstar")?"Philstar":"Inquirer")
+              ibaPangLarawan: media.listahanLarawan,
+              videoLarawan: media.videoLarawan,
+              videoLink: media.videoLink,
+              pinagmulan: orihinalNaUrl.includes("weather") ? "Philstar | PANAHON" : "Philstar"
             });
           });
 
@@ -166,19 +159,19 @@ module.exports = function(eleventyConfig) {
         }
       }
 
-      // ✅ AYOS: PINAKABAGO UNA + TANGGAL DOBLE
+      // ✅ AYOS: PINAKABAGO UNA + TANGGALIN ANG DOBLE PARA MALINIS
       lahatBalita.sort((a, b) => new Date(b.petsa) - new Date(a.petsa));
       const natatangi = Array.from(new Map(lahatBalita.map(i => [i.pamagat, i]))).map(m => m[1]);
 
-      // ✅ HANGGANG 20 PINAKABAGO
+      // ✅ HANGGANG 20 PINAKABAGO — handa na para dumami ulit kapag may dagdag na mapagkukunan
       const napilingBalita = natatangi.slice(0, 20);
       console.log(`✅ KABUUANG IPAPAKITA: ${napilingBalita.length} ulat — kumpleto sa larawan/video!`);
 
-      // 🚨 KUNG WALANG MAKUHA
+      // 🚨 MENSAHE KUNG WALANG MAKUHA
       if (napilingBalita.length === 0) {
         return [{
           pamagat: "Kasalukuyang inaayos ang serbisyo", link:"#", petsa:new Date(),
-          buod:"Babalik agad ang kumpletong balita kasama ang mga litrato at ulat panahon.",
+          buod:"Babalik agad ang kumpletong balita kapag naidagdag ulit ang iba pang mapagkukunan.",
           pangunahingLarawan:"https://via.placeholder.com/600x340/f57c00/ffffff?text=Nag-aayos+Pa",
           pinagmulan:"Sistema"
         }];
@@ -196,7 +189,7 @@ module.exports = function(eleventyConfig) {
     }
   });
 
-  // 📅 PETSA — TAGALOG
+  // 📅 PETSA — NAKASULAT SA WIKANG FILIPINO
   eleventyConfig.addFilter("formatDate", function(dateStr) {
     return new Date(dateStr).toLocaleDateString("tl-PH", {year:"numeric", month:"long", day:"numeric"});
   });
