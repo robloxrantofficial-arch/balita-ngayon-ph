@@ -6,18 +6,18 @@ module.exports = function(eleventyConfig) {
   eleventyConfig.addPassthroughCopy("src/assets/css");
   eleventyConfig.addPassthroughCopy("sw.js");
 
-  // 🛡️ DALAWANG URI NG PROXY — MAY PAGSUSURI MUNA!
+  // 🛡️ DALAWANG URI NG PROXY + MAY PAGSUSURI UPANG HINDI MAGKAMALI SA URL
   const gamitProxy = (linkUrl) => {
-    if(!linkUrl) return null; // ← HINDI NA SUSUBOK KUNG WALANG LAMAN
+    if(!linkUrl) return null;
     if(linkUrl.startsWith("data:") || linkUrl.includes("allorigins.win") || linkUrl.includes("corsproxy.io")) return linkUrl;
     return `https://api.allorigins.win/raw?url=${encodeURIComponent(linkUrl)}`;
   };
   const altProxy = (linkUrl) => {
-    if(!linkUrl) return null; // ← PROTEKSIYON DIN DITO
+    if(!linkUrl) return null;
     return `https://corsproxy.io/?${encodeURIComponent(linkUrl)}`;
   };
 
-  // 🖼️ MATATAG NA PAGKUHA NG LARAWAN + MAY PAGSUSURI SA LAHAT NG BAHAGI
+  // 🖼️ MATATAG NA PAGKUHA NG LARAWAN + TIYAK NA SUKAT NG KAPALIT NA LARAWAN
   const kuninLahatMedia = (item) => {
     const nakuha = {
       pangunahingLarawan: null,
@@ -26,7 +26,7 @@ module.exports = function(eleventyConfig) {
       videoLink: null
     };
 
-    // 1. Direktang media:content — sinusuri kung may url muna
+    // Kumuha mula media:content
     if(item?.["media:content"]){
       const mc = Array.isArray(item["media:content"]) ? item["media:content"] : [item["media:content"]];
       for(const m of mc){
@@ -38,13 +38,13 @@ module.exports = function(eleventyConfig) {
       }
     }
 
-    // 2. media:thumbnail — ligtas na pagbasa
+    // Kumuha mula media:thumbnail
     if(!nakuha.pangunahingLarawan && item?.["media:thumbnail"]?.url){
       nakuha.pangunahingLarawan = gamitProxy(item["media:thumbnail"].url);
       nakuha.listahanLarawan.push(nakuha.pangunahingLarawan);
     }
 
-    // 3. Hanapin sa loob ng nilalaman
+    // Hanapin sa loob ng nilalaman
     if(!nakuha.pangunahingLarawan){
       const buongTeksto = item?.["content:encoded"] || item?.content || item?.description || "";
       const tugmaLahatImg = buongTeksto.matchAll(/<img[^>]+src\s*=\s*["']([^"']+\.(jpg|jpeg|png|webp))["']/gi);
@@ -55,25 +55,21 @@ module.exports = function(eleventyConfig) {
       }
     }
 
-    // ✨ IBA'T IBANG KAPALIT NA LARAWAN — tugma sa bawat kategorya kasama na ang artista/showbiz
+    // ✨ MAY TIYAK NA LAKI + KASAMA ANG ARTISTA/SHOWBIZ KAPALIT NA LARAWAN
     const pamagat = (item?.pamagat || "").toString();
     const buod = (item?.buod || "").toString();
     const pamagatAtBuod = (pamagat + " " + buod).toLowerCase();
 
-    // ✨ Kapag pumipili ng kapalit na larawan — TIYAK NA MAY TIYAK NA LAKI para hindi magbago-bago ang taas
-const listahanKapalit = [
-  {susi:["panahon","ulan","bagyo","baha","init","ambon"], litrato:"https://images.unsplash.com/photo-1592210454359-9043f067919b?w=800&h=400&fit=crop&crop=center"},
-  {susi:["transport","kalsada","kotse","bus","tren","sasakyan"], litrato:"https://images.unsplash.com/photo-1449824913935-59a10b8d2000?w=800&h=400&fit=crop&crop=center"},
-  {susi:["negosyo","pera","kita","presyo","trabaho","ekonomiya","kabuhayan"], litrato:"https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=800&h=400&fit=crop&crop=center"},
-  {susi:["bansa","pamahalaan","gobyerno","pilipinas","pambansa","nasyonal"], litrato:"https://images.unsplash.com/photo-1529107386315-e1a2ed45a6d8?w=800&h=400&fit=crop&crop=center"},
-  {susi:["artista","showbiz","sikat","pelikula","aliw"], litrato:"https://images.unsplash.com/photo-1493225215050-0b468c4c7e74?w=800&h=400&fit=crop&crop=center"},
-  {susi:[], litrato:"https://images.unsplash.com/photo-1504711434969-e33886168f5c?w=800&h=400&fit=crop&crop=center"},
-  {susi:[], litrato:"https://images.unsplash.com/photo-1550751827-4bd374c3f58b?w=800&h=400&fit=crop&crop=center"},
-  {susi:[], litrato:"https://images.unsplash.com/photo-1432821596592-e2c18b78144f?w=800&h=400&fit=crop&crop=center"}
-];
-
-// ⏱️ BAWASAN ANG HINDI KAILANGANG HABANG PAGHIHINTAY — mas mabilis pero hindi agad-agad na harang
-const antala = ms => new Promise(r=>setTimeout(r, Math.min(ms, 600))); // hanggang 600ms na lang
+    const listahanKapalit = [
+      {susi:["panahon","ulan","bagyo","baha","init","ambon"], litrato:"https://images.unsplash.com/photo-1592210454359-9043f067919b?w=800&h=400&fit=crop&crop=center"},
+      {susi:["transport","kalsada","kotse","bus","tren","sasakyan"], litrato:"https://images.unsplash.com/photo-1449824913935-59a10b8d2000?w=800&h=400&fit=crop&crop=center"},
+      {susi:["negosyo","pera","kita","presyo","trabaho","ekonomiya","kabuhayan"], litrato:"https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=800&h=400&fit=crop&crop=center"},
+      {susi:["bansa","pamahalaan","gobyerno","pilipinas","pambansa","nasyonal"], litrato:"https://images.unsplash.com/photo-1529107386315-e1a2ed45a6d8?w=800&h=400&fit=crop&crop=center"},
+      {susi:["artista","showbiz","sikat","pelikula","aliw"], litrato:"https://images.unsplash.com/photo-1493225215050-0b468c4c7e74?w=800&h=400&fit=crop&crop=center"},
+      {susi:[], litrato:"https://images.unsplash.com/photo-1504711434969-e33886168f5c?w=800&h=400&fit=crop&crop=center"},
+      {susi:[], litrato:"https://images.unsplash.com/photo-1550751827-4bd374c3f58b?w=800&h=400&fit=crop&crop=center"},
+      {susi:[], litrato:"https://images.unsplash.com/photo-1432821596592-e2c18b78144f?w=800&h=400&fit=crop&crop=center"}
+    ];
 
     let napilingKapalit = null;
     for(const k of listahanKapalit){
@@ -94,8 +90,8 @@ const antala = ms => new Promise(r=>setTimeout(r, Math.min(ms, 600))); // hangga
     return nakuha;
   };
 
-  // ⏱️ Maikling paghihintay
-  const antala = ms => new Promise(r=>setTimeout(r,ms));
+  // ⏱️ PINA IKLI AT KONTROLADONG PAGHIHINTAY — hindi nagdudulot ng malaking puwang
+  const antala = ms => new Promise(r=>setTimeout(r, Math.min(ms, 600)));
 
   eleventyConfig.addGlobalData("balita", async function() {
     try {
@@ -128,12 +124,12 @@ const antala = ms => new Promise(r=>setTimeout(r, Math.min(ms, 600))); // hangga
           try{
             console.log(`🔁 Gamit unang proxy para sa: ${urlPinagkunan}`);
             const proxyUrl1 = gamitProxy(urlPinagkunan);
-            if(proxyUrl1) feed = await parser.parseURL(proxyUrl1); // ← GAMIT LANG KUNG MAY NABUO
+            if(proxyUrl1) feed = await parser.parseURL(proxyUrl1);
           }catch(e2){
             try{
               console.log(`🔁 Lumipat pangalawang proxy para sa: ${urlPinagkunan}`);
               const proxyUrl2 = altProxy(urlPinagkunan);
-              if(proxyUrl2) feed = await parser.parseURL(proxyUrl2); // ← GAMIT LANG KUNG MAY NABUO
+              if(proxyUrl2) feed = await parser.parseURL(proxyUrl2);
             }catch(e3){
               console.log(`❌ HINDI MAKUHA: ${urlPinagkunan} — ${e3.message}`);
               continue;
@@ -141,7 +137,7 @@ const antala = ms => new Promise(r=>setTimeout(r, Math.min(ms, 600))); // hangga
           }
         }
 
-        // ✅ HINDI NA TUTULOY KUNG WALANG NA-RETURN NA FEED
+        // ✅ LIGTAS: laktawan kung walang wastong feed
         if(!feed?.items) continue;
 
         console.log(`✅ NAKUHA: ${urlPinagkunan} — ${feed.items.length} balita`);
@@ -165,7 +161,6 @@ const antala = ms => new Promise(r=>setTimeout(r, Math.min(ms, 600))); // hangga
           });
         });
 
-        // 🖼️ Kumuha ng mga larawan
         lahatBalita.forEach(item=>{
           const media = kuninLahatMedia(item);
           item.pangunahingLarawan = media.pangunahingLarawan;
@@ -173,11 +168,11 @@ const antala = ms => new Promise(r=>setTimeout(r, Math.min(ms, 600))); // hangga
         });
       }
 
-      // Ayos: pinakabago muna + alis ng parehong ulat
+      // Ayusin: pinakabago muna + alisin ang parehong ulat
       lahatBalita.sort((a,b)=>b.petsa - a.petsa);
       const natatangi = Array.from(new Map(lahatBalita.map(i=>[i.pamagat,i]))).map(m=>m[1]);
 
-      // 🎯 MAY KASAMANG ARTISTA/SHOWBIZ NA KATEGORYA + LIGTAS NA PAGBASA NG QUERY
+      // 🎯 MAY KASAMANG ARTISTA/SHOWBIZ + LIGTAS NA PAGBASA NG KATEGORYA
       let pili = "lahat";
       try{
         if(this?.page?.url){
@@ -217,7 +212,7 @@ const antala = ms => new Promise(r=>setTimeout(r, Math.min(ms, 600))); // hangga
       console.error("❌ Pangkalahatang mali:", err);
       return [{
         pamagat: "Kasalukuyang inaayos", link:"#", petsa:new Date(), buod:"Subukan muli mamaya.",
-        pangunahingLarawan:"https://images.unsplash.com/photo-1550751827-4bd374c3f58b?w=800&h=400&fit=crop",
+        pangunahingLarawan:"https://images.unsplash.com/photo-1550751827-4bd374c3f58b?w=800&h=400&fit=crop&crop=center",
         pinagmulan:"Sistema"
       }];
     }
