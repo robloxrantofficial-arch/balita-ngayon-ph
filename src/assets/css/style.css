@@ -1,25 +1,28 @@
-/* 📦 KARTON NG BALITA — TIYAK NA HANGGANAN, HINDI LUMALAKI NANG WALANG DAHIL */
+/* 📦 Karton ng bawat balita - kontroladong puwang at hindi lumalaki nang walang dahilan */
 .card-balita {
   max-width: 100%;
-  margin: 12px auto !important; /* ✅ MULA SA SOBRANG LAKI → 12px LANG ANG PAGITAN */
+  margin: 12px auto !important; /* ✅ Tamang pagitan - hindi na sobrang layo */
   padding: 15px;
   box-sizing: border-box;
-  overflow: hidden; /* ✅ ITIGIL ANG PAGLABAS NG LAMAN NA NAGPAPALAKI NG KARTON */
+  overflow: hidden;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
 }
 
-/* 🖼️ LARAWAN — TIYAK NA PARE-PAREHONG TAAS AT LAPAD */
+/* 🖼️ Larawan - pare-parehong sukat, maayos na pagpuno */
 .card-balita img {
   width: 100%;
-  height: 400px; /* ✅ TIYAK NA TAAS — pareho sa sukat ng link ng litrato */
-  object-fit: cover; /* ✅ PUPUNUIN ANG LAKI HINDI MAGPAPALAKI NG KARTON */
+  height: 400px; /* ✅ Tugma sa sukat ng mga litrato sa kodigo */
+  object-fit: cover;
   object-position: center;
-  display: block; /* ✅ ALISIN ANG MGA NAKATAGONG MGA PUWANG SA ILALIM NG LARAWAN */
+  display: block; /* ✅ Alis nakatagong puwang sa ilalim ng larawan */
 }
 
-/* 📄 TEKSTO — LIMITADONG TAAS HINDI LUMALAWAK HANGGANG KAYA */
+/* 📄 Teksto/Buod - limitadong taas, malinis na ayos */
 .buod-balita {
   max-height: 5em;
   overflow: hidden;
   line-height: 1.5;
-  margin: 0; /* ✅ ALISIN ANG DAGDAG NA PUWANG */
+  margin: 0;
+  padding: 5px 0;
 }
