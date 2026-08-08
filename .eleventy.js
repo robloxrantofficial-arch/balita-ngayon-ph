@@ -60,16 +60,20 @@ module.exports = function(eleventyConfig) {
     const buod = (item?.buod || "").toString();
     const pamagatAtBuod = (pamagat + " " + buod).toLowerCase();
 
-    const listahanKapalit = [
-      {susi:["panahon","ulan","bagyo","baha","init","ambon"], litrato:"https://images.unsplash.com/photo-1592210454359-9043f067919b?w=800&h=400&fit=crop"},
-      {susi:["transport","kalsada","kotse","bus","tren","sasakyan"], litrato:"https://images.unsplash.com/photo-1449824913935-59a10b8d2000?w=800&h=400&fit=crop"},
-      {susi:["negosyo","pera","kita","presyo","trabaho","ekonomiya","kabuhayan"], litrato:"https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=800&h=400&fit=crop"},
-      {susi:["bansa","pamahalaan","gobyerno","pilipinas","pambansa","nasyonal"], litrato:"https://images.unsplash.com/photo-1529107386315-e1a2ed45a6d8?w=800&h=400&fit=crop"},
-      {susi:["artista","showbiz","sikat","pelikula","aliw"], litrato:"https://images.unsplash.com/photo-1493225215050-0b468c4c7e74?w=800&h=400&fit=crop"},
-      {susi:[], litrato:"https://images.unsplash.com/photo-1504711434969-e33886168f5c?w=800&h=400&fit=crop"},
-      {susi:[], litrato:"https://images.unsplash.com/photo-1550751827-4bd374c3f58b?w=800&h=400&fit=crop"},
-      {susi:[], litrato:"https://images.unsplash.com/photo-1432821596592-e2c18b78144f?w=800&h=400&fit=crop"}
-    ];
+    // ✨ Kapag pumipili ng kapalit na larawan — TIYAK NA MAY TIYAK NA LAKI para hindi magbago-bago ang taas
+const listahanKapalit = [
+  {susi:["panahon","ulan","bagyo","baha","init","ambon"], litrato:"https://images.unsplash.com/photo-1592210454359-9043f067919b?w=800&h=400&fit=crop&crop=center"},
+  {susi:["transport","kalsada","kotse","bus","tren","sasakyan"], litrato:"https://images.unsplash.com/photo-1449824913935-59a10b8d2000?w=800&h=400&fit=crop&crop=center"},
+  {susi:["negosyo","pera","kita","presyo","trabaho","ekonomiya","kabuhayan"], litrato:"https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=800&h=400&fit=crop&crop=center"},
+  {susi:["bansa","pamahalaan","gobyerno","pilipinas","pambansa","nasyonal"], litrato:"https://images.unsplash.com/photo-1529107386315-e1a2ed45a6d8?w=800&h=400&fit=crop&crop=center"},
+  {susi:["artista","showbiz","sikat","pelikula","aliw"], litrato:"https://images.unsplash.com/photo-1493225215050-0b468c4c7e74?w=800&h=400&fit=crop&crop=center"},
+  {susi:[], litrato:"https://images.unsplash.com/photo-1504711434969-e33886168f5c?w=800&h=400&fit=crop&crop=center"},
+  {susi:[], litrato:"https://images.unsplash.com/photo-1550751827-4bd374c3f58b?w=800&h=400&fit=crop&crop=center"},
+  {susi:[], litrato:"https://images.unsplash.com/photo-1432821596592-e2c18b78144f?w=800&h=400&fit=crop&crop=center"}
+];
+
+// ⏱️ BAWASAN ANG HINDI KAILANGANG HABANG PAGHIHINTAY — mas mabilis pero hindi agad-agad na harang
+const antala = ms => new Promise(r=>setTimeout(r, Math.min(ms, 600))); // hanggang 600ms na lang
 
     let napilingKapalit = null;
     for(const k of listahanKapalit){
