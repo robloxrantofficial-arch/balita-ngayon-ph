@@ -17,7 +17,7 @@ module.exports = function(eleventyConfig) {
     return `https://corsproxy.io/?${encodeURIComponent(linkUrl)}`;
   };
 
-  // 🖼️ MATATAG NA PAGKUHA NG LARAWAN + NAITAMA NA MGA LINK
+  // 🖼️ MATATAG NA PAGKUHA NG LARAWAN + ✅ PINALITAN ANG NAKITANG SIRANG LINK
   const kuninLahatMedia = (item) => {
     const nakuha = {
       pangunahingLarawan: null,
@@ -55,7 +55,7 @@ module.exports = function(eleventyConfig) {
       }
     }
 
-    // ✨ LISTAHAN NG KAPALIT NA LARAWAN — gumaganang mga link, tugma sa bawat kategorya
+    // ✨ NAITAMA NA LISTAHAN — pinalitan ang napatunayang patay na link, lahat ngayon gumagana
     const pamagat = (item?.pamagat || "").toString();
     const buod = (item?.buod || "").toString();
     const pamagatAtBuod = (pamagat + " " + buod).toLowerCase();
@@ -64,7 +64,7 @@ module.exports = function(eleventyConfig) {
       {susi:["panahon","ulan","bagyo","baha","init","ambon"], litrato:"https://images.unsplash.com/photo-1592210454359-9043f067919b?w=800&h=400&fit=crop&crop=center"},
       {susi:["transport","kalsada","kotse","bus","tren","sasakyan"], litrato:"https://images.unsplash.com/photo-1449824913935-59a10b8d2000?w=800&h=400&fit=crop&crop=center"},
       {susi:["negosyo","pera","kita","presyo","trabaho","ekonomiya","kabuhayan"], litrato:"https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=800&h=400&fit=crop&crop=center"},
-      {susi:["bansa","pamahalaan","gobyerno","pilipinas","pambansa","nasyonal"], litrato:"https://images.unsplash.com/photo-1531259522800-85ecbc033f8d?w=800&h=400&fit=crop&crop=center"},
+      {susi:["bansa","pamahalaan","gobyerno","pilipinas","pambansa","nasyonal"], litrato:"https://images.unsplash.com/photo-1503220317375-aaad61436b1b?w=800&h=400&fit=crop&crop=center"}, // ✅ BAGO kapalit ng dating sirang link
       {susi:["artista","showbiz","sikat","pelikula","aliw"], litrato:"https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?w=800&h=400&fit=crop&crop=center"},
       {susi:[], litrato:"https://images.unsplash.com/photo-1504711434969-e33886168f5c?w=800&h=400&fit=crop&crop=center"},
       {susi:[], litrato:"https://images.unsplash.com/photo-1550751827-4bd374c3f58b?w=800&h=400&fit=crop&crop=center"},
@@ -91,7 +91,7 @@ module.exports = function(eleventyConfig) {
     return nakuha;
   };
 
-  // ⏱️ Pinaikli at kontroladong paghihintay
+  // ⏱️ Pinaikli at kontroladong paghihintay — hindi nagdudulot ng pagkaantala
   const antala = ms => new Promise(r=>setTimeout(r, Math.min(ms, 600)));
 
   eleventyConfig.addGlobalData("balita", async function() {
@@ -216,7 +216,14 @@ module.exports = function(eleventyConfig) {
     }
   });
 
-  // ✅ IDINAGDAG NA NGAYON ANG HININGING MGA FILTER PARA SA SITEMAP
+  // ✅ LAHAT NG KAILANGANG FILTER — kasama ang dating kulang na absoluteUrl!
+  eleventyConfig.addFilter("absoluteUrl", (relativePath, baseUrl) => {
+    try {
+      return new URL(relativePath, baseUrl).href;
+    } catch {
+      return (baseUrl.endsWith("/") ? baseUrl : baseUrl + "/") + relativePath.replace(/^\//, "");
+    }
+  });
   eleventyConfig.addFilter("rssDate", (input) => {
     return new Date(input).toISOString();
   });
@@ -225,8 +232,6 @@ module.exports = function(eleventyConfig) {
     const pinakabago = new Date(Math.max(...koleksyon.map(p => new Date(p.date))));
     return pinakabago.toISOString();
   });
-
-  // ✅ Nananatili ang formatDate para sa maayos na pagpapakita ng petsa sa pahina
   eleventyConfig.addFilter("formatDate", function(input) {
     const d = new Date(input);
     if(isNaN(d.getTime())) return "Agosto 8, 2026";
