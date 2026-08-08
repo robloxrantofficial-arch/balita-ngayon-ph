@@ -17,7 +17,7 @@ module.exports = function(eleventyConfig) {
     return `https://corsproxy.io/?${encodeURIComponent(url)}`;
   };
 
-  // 🖼️ PINAKAMATATAG NA PAGKUHA + MAY IBA'T IBANG KAPALIT NA LARAWAN
+  // 🖼️ PINAKAMATATAG NA PAGKUHA + MAY IBA'T IBANG KAPALIT NA LARAWAN + MAY PROTEKSYON
   const kuninLahatMedia = (item) => {
     const nakuha = {
       pangunahingLarawan: null,
@@ -26,7 +26,7 @@ module.exports = function(eleventyConfig) {
       videoLink: null
     };
 
-    // 1. Direktang media:content + subok din sa pangalawang proxy
+    // 1. Direktang media:content
     if(item["media:content"]){
       const mc = Array.isArray(item["media:content"]) ? item["media:content"] : [item["media:content"]];
       for(const m of mc){
@@ -55,8 +55,11 @@ module.exports = function(eleventyConfig) {
       }
     }
 
-    // ✨ BAGO: IBA'T IBANG KAPALIT NA LARAWAN — ayon sa paksa + nagpapalit-palit!
-    const pamagatAtBuod = (item.pamagat + " " + item.buod).toLowerCase();
+    // ✨ MAY PROTEKSYON: TIYAK NA TEKSTO LANG ANG GAGAMITIN
+    const pamagat = (item.pamagat || "").toString(); // ← TIYAK NA TEKSTO, HINDI MAGIGING WALANG KAHULUGAN
+    const buod = (item.buod || "").toString();
+    const pamagatAtBuod = (pamagat + " " + buod).toLowerCase();
+
     const listahanKapalit = [
       {susi:["panahon","ulan","bagyo","baha","init","ambon"], litrato:"https://images.unsplash.com/photo-1592210454359-9043f067919b?w=800&h=400&fit=crop"},
       {susi:["transport","kalsada","kotse","bus","tren","sasakyan"], litrato:"https://images.unsplash.com/photo-1449824913935-59a10b8d2000?w=800&h=400&fit=crop"},
@@ -75,13 +78,12 @@ module.exports = function(eleventyConfig) {
         break;
       }
     }
-    // Kung walang tugma o maikli ang pamagat: magpalit gamit hash ng pamagat para magkakaiba
+    // Kung walang tugma: gumamit ng pamagat bilang batayan (tiyak na teksto na!)
     if(!napilingKapalit){
-      const hash = [...item.pamagat].reduce((sum,ch)=>sum+ch.charCodeAt(0),0);
-      napilingKapalit = listahanKapalit.slice(4)[hash % (listahanKapalit.length-4) + 0].litrato;
+      const hash = [...pamagat].reduce((sum,ch)=>sum+ch.charCodeAt(0),0);
+      napilingKapalit = listahanKapalit.slice(4)[hash % (listahanKapalit.length-4)].litrato;
     }
 
-    // Gamitin ang kapalit kung hindi makuha ang totoong litrato o masyadong maikli ang link
     if(!nakuha.pangunahingLarawan || nakuha.pangunahingLarawan.length < 15){
       nakuha.pangunahingLarawan = napilingKapalit;
     }
@@ -118,44 +120,48 @@ module.exports = function(eleventyConfig) {
         await antala(1000);
         let feed = null;
         try{
-          // Unang subok: direkta
           feed = await parser.parseURL(urlPinagkunan);
         }catch(e){
           try{
-            // Pangalawa: gamit unang proxy
             console.log(`🔁 Gamit unang proxy para sa: ${urlPinagkunan}`);
             feed = await parser.parseURL(gamitProxy(urlPinagkunan));
           }catch(e2){
             try{
-              // Pangatlo: gamit pangalawang proxy bilang huling pag-asa
               console.log(`🔁 Lumipat pangalawang proxy para sa: ${urlPinagkunan}`);
               feed = await parser.parseURL(altProxy(urlPinagkunan));
             }catch(e3){
               console.log(`❌ HINDI MAKUHA: ${urlPinagkunan} — ${e3.message}`);
-              continue; // laktawan kung talagang hindi maabot
+              continue;
             }
           }
         }
 
         console.log(`✅ NAKUHA: ${urlPinagkunan} — ${feed.items.length} balita`);
         feed.items.forEach(item=>{
-          const media = kuninLahatMedia(item);
+          const malinisNaPamagat = (item.title?.trim() || "Walang Pamagat").toString();
           const malinisNaBuod = (item["content:encoded"]||item.description||"")
             .replace(/<script[^>]*>[\s\S]*?<\/script>/gi,"")
             .replace(/<style[^>]*>[\s\S]*?<\/style>/gi,"")
             .replace(/<[^>]+>/g," ")
             .replace(/&nbsp;/g," ")
-            .trim();
+            .trim().substring(0,220)+"...";
 
           lahatBalita.push({
-            pamagat: item.title?.trim() || "Walang Pamagat",
+            pamagat: malinisNaPamagat, // ← TIYAK NA LAGING MAY TEKSTO
             link: item.link || "#",
             petsa: new Date(item.pubDate || Date.now()),
-            buod: malinisNaBuod.substring(0,220)+"...",
-            pangunahingLarawan: media.pangunahingLarawan,
-            ibaPangLarawan: media.listahanLarawan,
+            buod: malinisNaBuod,
+            pangunahingLarawan: null, // ← Ilagay muna, kukunin sa susunod na linya
+            ibaPangLarawan: [],
             pinagmulan: urlPinagkunan.includes("google") ? "GOOGLE NEWS PH" : "RAPPLER"
           });
+        });
+
+        // 📌 KUNIN ANG LARAWAN PAGKATAPOS MAKABUO ANG LAHAT NG DATOS — HINDI NA MAGKAKAMALI!
+        lahatBalita.forEach(async (item)=>{
+          const media = kuninLahatMedia(item);
+          item.pangunahingLarawan = media.pangunahingLarawan;
+          item.ibaPangLarawan = media.listahanLarawan;
         });
       }
 
@@ -163,12 +169,12 @@ module.exports = function(eleventyConfig) {
       lahatBalita.sort((a,b)=>b.petsa - a.petsa);
       const natatangi = Array.from(new Map(lahatBalita.map(i=>[i.pamagat,i]))).map(m=>m[1]);
 
-      // 🎯 PAGSALA NG BALITA AYON SA NAPILING KATEGORYA ✅
+      // 🎯 PAGSALA NG BALITA — MAY PROTEKSYON DIN DITO
       const queryData = url.parse(this.page.url, true).query;
       const pili = queryData.kategorya || "lahat";
 
       const napilingBalita = natatangi.filter(item => {
-        const buongTeksto = (item.pamagat + " " + item.buod).toLowerCase();
+        const buongTeksto = ((item.pamagat || "") + " " + (item.buod || "")).toLowerCase();
         switch(pili){
           case "pambansa":
             return buongTeksto.includes("pilipinas") || buongTeksto.includes("bansa") || buongTeksto.includes("gobyerno") || buongTeksto.includes("pambansa") || buongTeksto.includes("nasyonal");
@@ -185,7 +191,6 @@ module.exports = function(eleventyConfig) {
         }
       });
 
-      // Gamitin ang nasala: hanggang 20 ulat lamang
       return napilingBalita.slice(0,20);
 
     } catch (err) {
