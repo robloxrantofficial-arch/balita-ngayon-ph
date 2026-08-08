@@ -6,29 +6,36 @@ module.exports = function(eleventyConfig) {
   eleventyConfig.addPassthroughCopy("sw.js");
 
   // 🛠️ GAMITIN ANG PROXY PARA HINDI MAHARANG NG CORS/SERVER
-  const gamitProxy = (url) => {
-    return `https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`;
-  };
+  // 🛠️ MAS MATIBAY NA PAGKUHA + MAS MABUTING PROXY
+const gamitProxy = (url) => {
+  // Dagdag na opsyon para mas matagal at mas malawak ang pagtanggap
+  return `https://api.allorigins.win/raw?url=${encodeURIComponent(url)}&allowAll=true`;
+};
 
-  eleventyConfig.addGlobalData("balita", async function() {
-    try {
-      const parser = new Parser({
-        headers: { 
-          "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36",
-          "Accept": "application/rss+xml, application/xml, text/xml;q=0.9,*/*;q=0.8"
-        },
-        customFields: {
-          item: ["media:thumbnail", "media:content", "enclosure"]
-        },
-        timeout: 15000 // ⏱️ Mas mahabang oras ng paghihintay
-      });
+eleventyConfig.addGlobalData("balita", async function() {
+  try {
+    const parser = new Parser({
+      headers: { 
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36",
+        "Accept": "application/rss+xml, application/xml, text/xml;q=0.9, text/html;q=0.8,*/*;q=0.7",
+        "Accept-Language": "tl-PH,tl;q=0.9,en-US;q=0.8,en;q=0.7",
+        "Cache-Control": "no-cache",
+        "Referer": "https://www.google.com/"
+      },
+      customFields: {
+        item: ["media:thumbnail", "media:content", "enclosure"]
+      },
+      timeout: 25000, // ⏱️ PINAHABA HANGGANG 25 SEGUNDO — para hindi agad maputol
+      xmlParseOptions: { strict: false, trim: true, normalize: true } // para mabasa kahit may maliit na pagkukulang sa XML
+    });
 
-      // 📰 TATLONG PINAGKUKUNAN NG BALITA (mas tamang mga link)
-      const mgaPinagkukunan = [
-        "https://www.gmanetwork.com/news/rss/",
-        "https://newsinfo.inquirer.net/rss",
-        "https://www.rappler.com/rss/news/nation/"
-      ];
+    // 📰 MAAARI MONG DAGDAGAN NG IBANG MAPAGKUKUNAN KUNG MABILIS TUMUGON
+    const mgaPinagkukunan = [
+      "https://www.gmanetwork.com/news/rss/",
+      "https://newsinfo.inquirer.net/rss",
+      "https://www.rappler.com/rss/news/nation/",
+      "https://mb.com.ph/rss" // ✅ DAGDAG: Manila Bulletin — dagdag mapagkukunan para mas marami makuha
+    ];
 
       console.log("🔍 KUKUHA NG BALITA MULA SA 3 PINAGKUKUNAN...");
 
