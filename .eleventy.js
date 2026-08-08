@@ -17,7 +17,7 @@ module.exports = function(eleventyConfig) {
     return `https://corsproxy.io/?${encodeURIComponent(linkUrl)}`;
   };
 
-  // 🖼️ MATATAG NA PAGKUHA NG LARAWAN + ✅ PINALITAN ANG MGA SIRANG LINK
+  // 🖼️ MATATAG NA PAGKUHA NG LARAWAN + NAITAMA NA MGA LINK
   const kuninLahatMedia = (item) => {
     const nakuha = {
       pangunahingLarawan: null,
@@ -55,7 +55,7 @@ module.exports = function(eleventyConfig) {
       }
     }
 
-    // ✨ NAITAMA NA LISTAHAN NG KAPALIT NA LARAWAN — walang sirang link, tugma sa bawat kategorya
+    // ✨ LISTAHAN NG KAPALIT NA LARAWAN — gumaganang mga link, tugma sa bawat kategorya
     const pamagat = (item?.pamagat || "").toString();
     const buod = (item?.buod || "").toString();
     const pamagatAtBuod = (pamagat + " " + buod).toLowerCase();
@@ -64,12 +64,12 @@ module.exports = function(eleventyConfig) {
       {susi:["panahon","ulan","bagyo","baha","init","ambon"], litrato:"https://images.unsplash.com/photo-1592210454359-9043f067919b?w=800&h=400&fit=crop&crop=center"},
       {susi:["transport","kalsada","kotse","bus","tren","sasakyan"], litrato:"https://images.unsplash.com/photo-1449824913935-59a10b8d2000?w=800&h=400&fit=crop&crop=center"},
       {susi:["negosyo","pera","kita","presyo","trabaho","ekonomiya","kabuhayan"], litrato:"https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=800&h=400&fit=crop&crop=center"},
-      {susi:["bansa","pamahalaan","gobyerno","pilipinas","pambansa","nasyonal"], litrato:"https://images.unsplash.com/photo-1531259522800-85ecbc033f8d?w=800&h=400&fit=crop&crop=center"}, // ✅ kapalit ng dating sirang link
-      {susi:["artista","showbiz","sikat","pelikula","aliw"], litrato:"https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?w=800&h=400&fit=crop&crop=center"}, // ✅ kapalit ng dating sirang link
+      {susi:["bansa","pamahalaan","gobyerno","pilipinas","pambansa","nasyonal"], litrato:"https://images.unsplash.com/photo-1531259522800-85ecbc033f8d?w=800&h=400&fit=crop&crop=center"},
+      {susi:["artista","showbiz","sikat","pelikula","aliw"], litrato:"https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?w=800&h=400&fit=crop&crop=center"},
       {susi:[], litrato:"https://images.unsplash.com/photo-1504711434969-e33886168f5c?w=800&h=400&fit=crop&crop=center"},
       {susi:[], litrato:"https://images.unsplash.com/photo-1550751827-4bd374c3f58b?w=800&h=400&fit=crop&crop=center"},
       {susi:[], litrato:"https://images.unsplash.com/photo-1432821596592-e2c18b78144f?w=800&h=400&fit=crop&crop=center"},
-      {susi:[], litrato:"https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=800&h=400&fit=crop&crop=center"} // ✅ dagdag reserba
+      {susi:[], litrato:"https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=800&h=400&fit=crop&crop=center"}
     ];
 
     let napilingKapalit = null;
@@ -91,7 +91,7 @@ module.exports = function(eleventyConfig) {
     return nakuha;
   };
 
-  // ⏱️ PINA IKLI AT KONTROLADONG PAGHIHINTAY — hindi nagdudulot ng malaking puwang
+  // ⏱️ Pinaikli at kontroladong paghihintay
   const antala = ms => new Promise(r=>setTimeout(r, Math.min(ms, 600)));
 
   eleventyConfig.addGlobalData("balita", async function() {
@@ -138,7 +138,6 @@ module.exports = function(eleventyConfig) {
           }
         }
 
-        // ✅ LIGTAS: laktawan kung walang wastong feed
         if(!feed?.items) continue;
 
         console.log(`✅ NAKUHA: ${urlPinagkunan} — ${feed.items.length} balita`);
@@ -169,11 +168,9 @@ module.exports = function(eleventyConfig) {
         });
       }
 
-      // Ayusin: pinakabago muna + alisin ang parehong ulat
       lahatBalita.sort((a,b)=>b.petsa - a.petsa);
       const natatangi = Array.from(new Map(lahatBalita.map(i=>[i.pamagat,i]))).map(m=>m[1]);
 
-      // 🎯 MAY KASAMANG ARTISTA/SHOWBIZ + LIGTAS NA PAGBASA NG KATEGORYA
       let pili = "lahat";
       try{
         if(this?.page?.url){
@@ -219,7 +216,17 @@ module.exports = function(eleventyConfig) {
     }
   });
 
-  // ✅ Ayos na formatDate para mawala ang Invalid Date
+  // ✅ IDINAGDAG NA NGAYON ANG HININGING MGA FILTER PARA SA SITEMAP
+  eleventyConfig.addFilter("rssDate", (input) => {
+    return new Date(input).toISOString();
+  });
+  eleventyConfig.addFilter("rssLastUpdatedDate", (koleksyon) => {
+    if (!koleksyon || koleksyon.length === 0) return new Date().toISOString();
+    const pinakabago = new Date(Math.max(...koleksyon.map(p => new Date(p.date))));
+    return pinakabago.toISOString();
+  });
+
+  // ✅ Nananatili ang formatDate para sa maayos na pagpapakita ng petsa sa pahina
   eleventyConfig.addFilter("formatDate", function(input) {
     const d = new Date(input);
     if(isNaN(d.getTime())) return "Agosto 8, 2026";
