@@ -25,9 +25,11 @@ eleventyExcludeFromCollections: true
 
   <!-- Lahat ng ibang pahina / Balita -->
   {% for pahina in collections.all %}
-    {% if pahina.url != '/' and not pahina.url starts with '/?kategorya=' %}
+    {% set pahinaUrl = pahina.url | url %}
+    <!-- ✅ Pinalitan ang hindi gumaganang startsWith ng ligtas na pagsusuri -->
+    {% if pahinaUrl != '/' and pahinaUrl.indexOf('/?kategorya=') != 0 %}
   <url>
-    <loc>{{ pahina.url | url | absoluteUrl(meta.url) }}</loc>
+    <loc>{{ pahinaUrl | absoluteUrl(meta.url) }}</loc>
     <lastmod>{{ pahina.date | rssDate }}</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
