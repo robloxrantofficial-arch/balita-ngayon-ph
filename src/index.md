@@ -102,6 +102,9 @@ title: "Pilipinas Auto News Portal"
         <li style="padding:6px 0;">
           <a href="?kategorya=iba" style="color:#00467f; text-decoration:none; font-weight:bold; cursor:pointer;">📰 Iba pang Napapanahong Isyu</a>
         </li>
+        <li style="padding:6px 0;">
+        <a href="?kategorya=iba" style="color:#00467f; text-decoration:none; font-weight:bold; cursor:pointer;">🎭 Artista at Sikat na Balita</a>
+          </li>
       </ul>
     </div>
     <div style="background:linear-gradient(180deg,#00467f,#2a6fb8); border-radius:12px; padding:20px; color:white; box-shadow:0 4px 15px rgba(0,70,127,0.2);">
