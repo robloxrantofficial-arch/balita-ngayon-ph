@@ -17,7 +17,7 @@ module.exports = function(eleventyConfig) {
     return `https://corsproxy.io/?${encodeURIComponent(linkUrl)}`;
   };
 
-  // 🖼️ MATATAG NA PAGKUHA NG LARAWAN + ✅ PINALITAN ANG NAKITANG SIRANG LINK
+  // 🖼️ MATATAG NA PAGKUHA NG LARAWAN + ✅ PINALITAN ANG NAKITANG SIRANG LINK + ✅ IDINAGDAG ANG RESERBA SA HULI
   const kuninLahatMedia = (item) => {
     const nakuha = {
       pangunahingLarawan: null,
@@ -64,7 +64,7 @@ module.exports = function(eleventyConfig) {
       {susi:["panahon","ulan","bagyo","baha","init","ambon"], litrato:"https://images.unsplash.com/photo-1592210454359-9043f067919b?w=800&h=400&fit=crop&crop=center"},
       {susi:["transport","kalsada","kotse","bus","tren","sasakyan"], litrato:"https://images.unsplash.com/photo-1449824913935-59a10b8d2000?w=800&h=400&fit=crop&crop=center"},
       {susi:["negosyo","pera","kita","presyo","trabaho","ekonomiya","kabuhayan"], litrato:"https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=800&h=400&fit=crop&crop=center"},
-      {susi:["bansa","pamahalaan","gobyerno","pilipinas","pambansa","nasyonal"], litrato:"https://images.unsplash.com/photo-1503220317375-aaad61436b1b?w=800&h=400&fit=crop&crop=center"}, // ✅ BAGO kapalit ng dating sirang link
+      {susi:["bansa","pamahalaan","gobyerno","pilipinas","pambansa","nasyonal"], litrato:"https://images.unsplash.com/photo-1503220317375-aaad61436b1b?w=800&h=400&fit=crop&crop=center"},
       {susi:["artista","showbiz","sikat","pelikula","aliw"], litrato:"https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?w=800&h=400&fit=crop&crop=center"},
       {susi:[], litrato:"https://images.unsplash.com/photo-1504711434969-e33886168f5c?w=800&h=400&fit=crop&crop=center"},
       {susi:[], litrato:"https://images.unsplash.com/photo-1550751827-4bd374c3f58b?w=800&h=400&fit=crop&crop=center"},
@@ -84,8 +84,14 @@ module.exports = function(eleventyConfig) {
       napilingKapalit = listahanKapalit.slice(4)[hash % (listahanKapalit.length-4)].litrato;
     }
 
-    if(!nakuha.pangunahingLarawan || nakuha.pangunahingLarawan.length < 15){
-      nakuha.pangunahingLarawan = napilingKapalit;
+    // ✅✅✅ IDINAGDAG ANG HININGING PAGSUSURI AT HULING RESERBA DITO ✅✅✅
+    if(!nakuha.pangunahingLarawan || nakuha.pangunahingLarawan.length <15 || nakuha.pangunahingLarawan.includes("link dead")){
+      // Pili mula sa mas matatag na listahan, dagdag na huling takbuhan
+      const reserba = [
+        "https://images.unsplash.com/photo-1504711434969-e33886168f5c?w=800&h=400&fit=crop&crop=center",
+        "https://images.unsplash.com/photo-1550751827-4bd374c3f58b?w=800&h=400&fit=crop&crop=center"
+      ];
+      nakuha.pangunahingLarawan = napilingKapalit || reserba[Math.floor(Math.random()*reserba.length)];
     }
 
     return nakuha;
