@@ -17,7 +17,7 @@ module.exports = function(eleventyConfig) {
     return `https://corsproxy.io/?${encodeURIComponent(linkUrl)}`;
   };
 
-  // 🖼️ MATATAG NA PAGKUHA NG LARAWAN + TIYAK NA SUKAT NG KAPALIT NA LARAWAN
+  // 🖼️ MATATAG NA PAGKUHA NG LARAWAN + ✅ PINALITAN ANG MGA SIRANG LITRATO
   const kuninLahatMedia = (item) => {
     const nakuha = {
       pangunahingLarawan: null,
@@ -55,7 +55,7 @@ module.exports = function(eleventyConfig) {
       }
     }
 
-    // ✨ MAY TIYAK NA LAKI + KASAMA ANG ARTISTA/SHOWBIZ KAPALIT NA LARAWAN
+    // ✨ BAGONG LISTAHAN — pinalitan ang mga patay na link, may dagdag na reserba
     const pamagat = (item?.pamagat || "").toString();
     const buod = (item?.buod || "").toString();
     const pamagatAtBuod = (pamagat + " " + buod).toLowerCase();
@@ -64,11 +64,12 @@ module.exports = function(eleventyConfig) {
       {susi:["panahon","ulan","bagyo","baha","init","ambon"], litrato:"https://images.unsplash.com/photo-1592210454359-9043f067919b?w=800&h=400&fit=crop&crop=center"},
       {susi:["transport","kalsada","kotse","bus","tren","sasakyan"], litrato:"https://images.unsplash.com/photo-1449824913935-59a10b8d2000?w=800&h=400&fit=crop&crop=center"},
       {susi:["negosyo","pera","kita","presyo","trabaho","ekonomiya","kabuhayan"], litrato:"https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=800&h=400&fit=crop&crop=center"},
-      {susi:["bansa","pamahalaan","gobyerno","pilipinas","pambansa","nasyonal"], litrato:"https://images.unsplash.com/photo-1529107386315-e1a2ed45a6d8?w=800&h=400&fit=crop&crop=center"},
-      {susi:["artista","showbiz","sikat","pelikula","aliw"], litrato:"https://images.unsplash.com/photo-1493225215050-0b468c4c7e74?w=800&h=400&fit=crop&crop=center"},
+      {susi:["bansa","pamahalaan","gobyerno","pilipinas","pambansa","nasyonal"], litrato:"https://images.unsplash.com/photo-1531259522800-85ecbc033f8d?w=800&h=400&fit=crop&crop=center"}, // ✅ BAGO kapalit ng patay
+      {susi:["artista","showbiz","sikat","pelikula","aliw"], litrato:"https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?w=800&h=400&fit=crop&crop=center"}, // ✅ BAGO kapalit ng patay
       {susi:[], litrato:"https://images.unsplash.com/photo-1504711434969-e33886168f5c?w=800&h=400&fit=crop&crop=center"},
       {susi:[], litrato:"https://images.unsplash.com/photo-1550751827-4bd374c3f58b?w=800&h=400&fit=crop&crop=center"},
-      {susi:[], litrato:"https://images.unsplash.com/photo-1432821596592-e2c18b78144f?w=800&h=400&fit=crop&crop=center"}
+      {susi:[], litrato:"https://images.unsplash.com/photo-1432821596592-e2c18b78144f?w=800&h=400&fit=crop&crop=center"},
+      {susi:[], litrato:"https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=800&h=400&fit=crop&crop=center"} // ✅ dagdag reserba
     ];
 
     let napilingKapalit = null;
@@ -90,7 +91,7 @@ module.exports = function(eleventyConfig) {
     return nakuha;
   };
 
-  // ⏱️ PINA IKLI AT KONTROLADONG PAGHIHINTAY — hindi nagdudulot ng malaking puwang
+  // ⏱️ PINA IKLI AT KONTROLADONG PAGHIHINTAY
   const antala = ms => new Promise(r=>setTimeout(r, Math.min(ms, 600)));
 
   eleventyConfig.addGlobalData("balita", async function() {
