@@ -5,16 +5,25 @@ module.exports = function(eleventyConfig) {
   eleventyConfig.addPassthroughCopy("src/assets/css");
   eleventyConfig.addPassthroughCopy("sw.js");
 
+  // 🛠️ GAMITIN ANG PROXY PARA HINDI MAHARANG NG CORS/SERVER
+  const gamitProxy = (url) => {
+    return `https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`;
+  };
+
   eleventyConfig.addGlobalData("balita", async function() {
     try {
       const parser = new Parser({
-        headers: { "User-Agent": "Mozilla/5.0" },
+        headers: { 
+          "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36",
+          "Accept": "application/rss+xml, application/xml, text/xml;q=0.9,*/*;q=0.8"
+        },
         customFields: {
           item: ["media:thumbnail", "media:content", "enclosure"]
-        }
+        },
+        timeout: 10000 // ⏱️ Limit ng paghihintay — hindi maghihintay nang walang hanggan
       });
 
-      // 📰 TATLONG PINAGKUKUNAN — PARA SIGURADONG MAY LARAWAN!
+      // 📰 TATLONG PINAGKUKUNAN NG BALITA
       const mgaPinagkukunan = [
         "https://www.gmanet.com/news/national/rss.xml",
         "https://www.inquirer.net/rss/philippines",
@@ -23,7 +32,7 @@ module.exports = function(eleventyConfig) {
 
       console.log("🔍 KUKUHA NG BALITA MULA SA 3 PINAGKUKUNAN...");
 
-      // 🖼️ HANAPIN ANG LARAWAN SA LAHAT NG PUWEDE PUWESTO
+      // 🖼️ HANAPIN ANG LARAWAN — MAY KAPALIT KUNG WALA
       const kuninLarawan = (item) => {
         if (item["media:thumbnail"]?.url) return item["media:thumbnail"].url;
         if (item["media:content"]?.url) return item["media:content"].url;
@@ -33,48 +42,95 @@ module.exports = function(eleventyConfig) {
           const tugma = item.description.match(/<img[^>]+src="([^"]+)"/);
           if (tugma && tugma[1]) return tugma[1];
         }
-        return null;
+        // 🖼️ LARAWAN NA KAPALIT KUNG WALANG NAKUHA
+        return "https://via.placeholder.com/420x240/2c3e50/ffffff?text=Walang+Larawan";
       };
 
-      // 📦 KUKUHA MULA SA LAHAT NG PINAGKUKUNAN
       const lahatBalita = [];
-      for (const url of mgaPinagkukunan) {
+
+      // 📦 KUKUHA SA LAHAT — MAY MABUTING PAGHAHABOL NG PAGKAMALI
+      for (const orihinalNaUrl of mgaPinagkukunan) {
         try {
-          const feed = await parser.parseURL(url);
+          const urlSaProxy = gamitProxy(orihinalNaUrl);
+          const feed = await parser.parseURL(urlSaProxy);
+          console.log(`✅ NAKUHA: ${orihinalNaUrl} — ${feed.items.length} balita`);
+
           feed.items.forEach(item => {
             lahatBalita.push({
-              pamagat: item.title,
-              link: item.link,
-              petsa: item.pubDate,
-              buod: (item.contentSnippet || item.description || "").replace(/<[^>]*>/g, "").substring(0, 120) + "...",
+              pamagat: item.title?.trim() || "Walang Pamagat",
+              link: item.link || "#",
+              petsa: item.pubDate || new Date(),
+              buod: (item.contentSnippet || item.description || "Walang maibibigay na buod...")
+                      .replace(/<[^>]*>/g, "") // ⚪ Tanggalin ang mga tag na HTML
+                      .substring(0, 130) + "...",
               larawan: kuninLarawan(item),
-              pinagmulan: url.includes("gmanet") ? "GMA News" : url.includes("inquirer") ? "Inquirer" : "Rappler"
+              pinagmulan: orihinalNaUrl.includes("gmanet") ? "GMA News" 
+                        : orihinalNaUrl.includes("inquirer") ? "Inquirer" 
+                        : "Rappler"
             });
           });
-        } catch (e) {
-          console.log("⚠️ HINDI MAKUHA MULA SA:", url);
+
+        } catch (mali) {
+          console.log(`⚠️ HINDI MAKUHA MULA SA: ${orihinalNaUrl}`);
+          console.log(`   → Dahilan: ${mali.message}`);
         }
       }
 
-      // ✅ AYUSIN AYON SA PETSA — PINAKABAGONG UNA
+      // ✅ AYUSIN: PINAKABAGONG BALITA UNA
       lahatBalita.sort((a, b) => new Date(b.petsa) - new Date(a.petsa));
 
-      // ✅ KUNIN ANG UNANG 8 BALITA
-      console.log("✅ KABUUANG BILANG NG BALITA:", lahatBalita.length);
-      return lahatBalita.slice(0, 8);
+      // 🧪 KUNG WALANG NAKUHA TALAGA — MAGLAGAY NG MGA HALIMBAWA HINDI BLANGKO
+      if (lahatBalita.length === 0) {
+        console.log("ℹ️ WALANG BALITANG NAKUHA — nagdagdag ng halimbawa habang inaayos");
+        lahatBalita.push(
+          {
+            pamagat: "Kasalukuyang inaayos ang pagkuha ng balita",
+            link: "#",
+            petsa: new Date(),
+            buod: "Maaaring pansamantalang hindi maabot ang mga pinagkukunan. Babalik agad ang totoong balita kapag maayos na.",
+            larawan: "https://via.placeholder.com/420x240/3498db/ffffff?text=Pansamantalang+Balita",
+            pinagmulan: "Paghahanda"
+          },
+          {
+            pamagat: "Patuloy na pagpapabuti ng serbisyo",
+            link: "#",
+            petsa: new Date(Date.now() - 7200000),
+            buod: "Sinusubukang gawing mas mabilis at matatag ang pagpapakita ng mga napapanahong ulat.",
+            larawan: "https://via.placeholder.com/420x240/2ecc71/ffffff?text=Maghihintay+Sandali",
+            pinagmulan: "Paghahanda"
+          }
+        );
+      }
 
-    } catch (err) {
-      console.error("❌ MALI:", err.message);
-      return [];
+      // ✅ KUNIN ANG PINAKA-UNA NA 8 PINAKABAGO
+      const napilingBalita = lahatBalita.slice(0, 8);
+      console.log(`✅ KABUUANG IPAPAKITA: ${napilingBalita.length} balita`);
+      return napilingBalita;
+
+    } catch (malakiAngMali) {
+      console.error("❌ MALAKING PAGKAMALI SA PAGKUHA:", malakiAngMali.message);
+      // 🚨 KAHIT MAY PANGKALAHATANG PAGKAMALI — MAGBALIK NG LAMAN HINDI BLANGKO
+      return [{
+        pamagat: "May pansamantalang aberya sa pagkuha ng balita",
+        link: "#",
+        petsa: new Date(),
+        buod: "Mangyaring subukang muli mamaya. Salamat sa pag-unawa.",
+        larawan: "https://via.placeholder.com/420x240/e74c3c/ffffff?text=Kailangang+Subukan+Muli",
+        pinagmulan: "Paalala"
+      }];
     }
   });
 
+  // 📅 PAGPAPAGANDA NG PETSA — WIKANG FILIPINO
   eleventyConfig.addFilter("formatDate", function(dateStr) {
     return new Date(dateStr).toLocaleDateString("tl-PH", {
-      year: "numeric", month: "long", day: "numeric"
+      year: "numeric",
+      month: "long",
+      day: "numeric"
     });
   });
 
+  // ⚙️ PANGKALAHATANG AYOS NG ELEVENTY
   return {
     markdownTemplateEngine: "njk",
     htmlTemplateEngine: "njk",
