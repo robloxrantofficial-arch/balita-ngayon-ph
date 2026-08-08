@@ -1,5 +1,6 @@
 const Parser = require("rss-parser");
 require("isomorphic-fetch");
+const url = require('url'); // ✅ DINAGDAG: kailangan para mabasa ang query
 
 module.exports = function(eleventyConfig) {
   eleventyConfig.addPassthroughCopy("src/assets/css");
@@ -83,10 +84,10 @@ module.exports = function(eleventyConfig) {
       ];
 
       const lahatBalita = [];
-      for(const url of mgaPinagkukunan){
+      for(const urlPinagkunan of mgaPinagkukunan){
         await antala(1000);
         try{
-          const feed = await parser.parseURL(url);
+          const feed = await parser.parseURL(urlPinagkunan);
           feed.items.forEach(item=>{
             const media = kuninLahatMedia(item);
             const malinisNaBuod = (item["content:encoded"]||item.description||"")
@@ -100,12 +101,12 @@ module.exports = function(eleventyConfig) {
               buod: malinisNaBuod.substring(0,220)+"...",
               pangunahingLarawan: media.pangunahingLarawan,
               ibaPangLarawan: media.listahanLarawan,
-              pinagmulan: url.includes("google") ? "GOOGLE NEWS PH" : "RAPPLER"
+              pinagmulan: urlPinagkunan.includes("google") ? "GOOGLE NEWS PH" : "RAPPLER"
             });
           });
-          console.log(`✅ NAKUHA: ${url} — ${feed.items.length} balita`);
+          console.log(`✅ NAKUHA: ${urlPinagkunan} — ${feed.items.length} balita`);
         }catch(e){
-          console.log(`⚠️ Hindi makapasok: ${url} — ${e.message}`);
+          console.log(`⚠️ Hindi makapasok: ${urlPinagkunan} — ${e.message}`);
           continue;
         }
       }
@@ -113,7 +114,32 @@ module.exports = function(eleventyConfig) {
       // Ayos: pinakabago muna + alis ng parehong ulat
       lahatBalita.sort((a,b)=>b.petsa - a.petsa);
       const natatangi = Array.from(new Map(lahatBalita.map(i=>[i.pamagat,i]))).map(m=>m[1]);
-      return natatangi.slice(0,20);
+
+      // 🎯 DITO NA INILAGAY — PAGSALA NG BALITA AYON SA NAPILING KATEGORYA ✅
+      const queryData = url.parse(this.page.url, true).query;
+      const pili = queryData.kategorya || "lahat";
+
+      const napilingBalita = natatangi.filter(item => {
+        const buongTeksto = (item.pamagat + " " + item.buod).toLowerCase();
+        switch(pili){
+          case "pambansa":
+            return buongTeksto.includes("pilipinas") || buongTeksto.includes("bansa") || buongTeksto.includes("gobyerno") || buongTeksto.includes("pambansa") || buongTeksto.includes("nasyonal");
+          case "panahon":
+            return buongTeksto.includes("ulan") || buongTeksto.includes("bagyo") || buongTeksto.includes("panahon") || buongTeksto.includes("init") || buongTeksto.includes("ambon") || buongTeksto.includes("baha");
+          case "sasakyan":
+            return buongTeksto.includes("kotse") || buongTeksto.includes("sasakyan") || buongTeksto.includes("bus") || buongTeksto.includes("tren") || buongTeksto.includes("kalsada") || buongTeksto.includes("transport");
+          case "kabuhayan":
+            return buongTeksto.includes("pera") || buongTeksto.includes("kita") || buongTeksto.includes("presyo") || buongTeksto.includes("trabaho") || buongTeksto.includes("negosyo") || buongTeksto.includes("ekonomiya");
+          case "iba":
+            return true;
+          default:
+            return true; // Ipakita LAHAT kapag walang pinili
+        }
+      });
+
+      // Gamitin ang nasala: hanggang 20 ulat lamang
+      return napilingBalita.slice(0,20);
+      // ----------------------------------------------------------
 
     } catch (err) {
       console.error("❌ Pangkalahatang mali:", err);
